@@ -1,9 +1,11 @@
-[![Actions Status](https://github.com/JulienKode/team-labeler-action-old/workflows/build-test/badge.svg)](https://github.com/JulienKode/team-labeler-action-old/actions)
+[![Actions Status](https://github.com/JulienKode/team-labeler-action/workflows/build-test/badge.svg)](https://github.com/JulienKode/team-labeler-action/actions)
 
 This repository provides a **GitHub action** to automatically **team label** on a **pull request** based author team.
 This is useful if multiple team are working on the same project.
 
-# Team Labeler Action
+![example](./assets/example.png)
+
+# Team Labeler Action 👥
 
 ## Configuration
 
