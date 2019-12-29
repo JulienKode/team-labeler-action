@@ -1,0 +1,51 @@
+{
+  "name": "team-labeler-action",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Action to add a label based on the team",
+  "main": "lib/main.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write **/*.ts",
+    "format-check": "prettier --check **/*.ts",
+    "lint": "eslint src/**/*.ts",
+    "package": "ncc build",
+    "test": "jest",
+    "all": "yarn build && yarn format && yarn lint && yarn package && yarn test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JulienKode/team-labeler-action.git"
+  },
+  "keywords": [
+    "actions",
+    "github",
+    "team",
+    "label",
+    "labeller",
+    "node"
+  ],
+  "author": "Julien Karst",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "1.2.0",
+    "@actions/github": "1.1.0",
+    "js-yaml": "^3.13.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.23",
+    "@types/js-yaml": "^3.12.1",
+    "@types/node": "^12.7.12",
+    "@typescript-eslint/parser": "^2.8.0",
+    "@zeit/ncc": "^0.20.5",
+    "eslint": "^5.16.0",
+    "eslint-plugin-github": "^2.0.0",
+    "eslint-plugin-jest": "^22.21.0",
+    "jest": "^24.9.0",
+    "jest-circus": "^24.9.0",
+    "js-yaml": "^3.13.1",
+    "prettier": "^1.19.1",
+    "ts-jest": "^24.2.0",
+    "typescript": "^3.6.4"
+  }
+}

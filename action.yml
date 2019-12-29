@@ -1,0 +1,17 @@
+name: 'Team labeler action'
+description: "Add a team label based on the author's team"
+author: 'Julien Karst'
+inputs:
+  repo-token:
+    required: true
+    description: 'The GITHUB_TOKEN secret'
+  configuration-path:
+    description: 'The path for the label configurations'
+    required: false
+    default: '.github/teams.yml'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+branding:
+  icon: 'users'
+  color: 'blue'
