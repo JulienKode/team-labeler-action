@@ -31,7 +31,7 @@ Create a workflow (eg: `.github/workflows/team-labeler.yml` see [Creating a Work
 This action only needs the GITHUB_TOKEN secret as it interacts with the GitHub API to modify labels. The action can be used as such:
 
 ```yaml
-on: pull-request
+on: pull_request
 name: team-label
 jobs:
   team-labeler:
