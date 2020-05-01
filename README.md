@@ -1,7 +1,7 @@
 # Team Labeler Action 👥
 
-[![build](https://github.com/JulienKode/team-labeler-action/workflows/build/badge.svg?branch=master)](https://github.com/JulienKode/team-labeler-action/actions)
-[![test](https://github.com/JulienKode/team-labeler-action/workflows/test/badge.svg?branch=master)](https://github.com/JulienKode/team-labeler-action/actions)
+[![build](https://github.com/JulienKode/team-labeler-action/workflows/build/badge.svg)](https://github.com/JulienKode/team-labeler-action/actions)
+[![test](https://github.com/JulienKode/team-labeler-action/workflows/test/badge.svg)](https://github.com/JulienKode/team-labeler-action/actions)
 [![GitHub issues](https://img.shields.io/github/issues/JulienKode/team-labeler-action?style=flat-square)](https://github.com/JulienKode/team-labeler-action/issues)
 [![GitHub forks](https://img.shields.io/github/forks/JulienKode/team-labeler-action?style=flat-square)](https://github.com/JulienKode/team-labeler-action/network)
 [![GitHub stars](https://img.shields.io/github/stars/JulienKode/team-labeler-action?style=flat-square)](https://github.com/JulienKode/team-labeler-action/stargazers)
