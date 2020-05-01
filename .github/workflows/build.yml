@@ -1,4 +1,4 @@
-name: "test"
+name: "build"
 on:
   pull_request:
   push:
@@ -7,10 +7,10 @@ on:
       - 'releases/*'
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: ./
-      with:
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+    - run: |
+        yarn
+        yarn all
