@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@types/jest": "25.1.1",
-    "@types/js-yaml": "3.12.2",
+    "@types/js-yaml": "3.12.3",
     "@types/node": "12.12.26",
     "@typescript-eslint/parser": "2.18.0",
     "@zeit/ncc": "0.21.0",
