@@ -11,6 +11,7 @@
     "lint": "eslint src/**/*.ts",
     "package": "ncc build",
     "test": "jest",
+    "build:pack": "yarn build && yarn package",
     "all": "yarn build && yarn format && yarn lint && yarn package && yarn test"
   },
   "repository": {
