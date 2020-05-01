@@ -1,4 +1,11 @@
-[![Actions Status](https://github.com/JulienKode/team-labeler-action/workflows/build-test/badge.svg)](https://github.com/JulienKode/team-labeler-action/actions)
+[![build](https://github.com/JulienKode/team-labeler-action/workflows/build/badge.svg?branch=master)](https://github.com/JulienKode/team-labeler-action/actions)
+[![test](https://github.com/JulienKode/team-labeler-action/workflows/test/badge.svg?branch=master)](https://github.com/JulienKode/team-labeler-action/actions)
+[![GitHub issues](https://img.shields.io/github/issues/JulienKode/team-labeler-action?style=flat-square)](https://github.com/JulienKode/team-labeler-action/issues)
+[![GitHub forks](https://img.shields.io/github/forks/JulienKode/team-labeler-action?style=flat-square)](https://github.com/JulienKode/team-labeler-action/network)
+[![GitHub stars](https://img.shields.io/github/stars/JulienKode/team-labeler-action?style=flat-square)](https://github.com/JulienKode/team-labeler-action/stargazers)
+[![GitHub license](https://img.shields.io/github/license/JulienKode/team-labeler-action?style=flat-square)](https://github.com/JulienKode/team-labeler-action/blob/master/LICENSE)
+[![Watch on GitHub](https://img.shields.io/github/watchers/JulienKode/team-labeler-action.svg?style=social)](https://github.com/JulienKode/team-labeler-action/watchers)
+[![Tweet](https://img.shields.io/twitter/url/https/github.com/JulienKode/team-labeler-action.svg?style=social)](https://twitter.com/intent/tweet?text=Checkout%20this%20library%20https%3A%2F%2Fgithub.com%2FJulienKode%2Fteam-labeler-action)
 
 This repository provides a **GitHub action** to automatically **team label** on a **pull request** based author team.
 This is useful if multiple team are working on the same project.
