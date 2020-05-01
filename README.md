@@ -1,3 +1,5 @@
+# Team Labeler Action 👥
+
 [![build](https://github.com/JulienKode/team-labeler-action/workflows/build/badge.svg?branch=master)](https://github.com/JulienKode/team-labeler-action/actions)
 [![test](https://github.com/JulienKode/team-labeler-action/workflows/test/badge.svg?branch=master)](https://github.com/JulienKode/team-labeler-action/actions)
 [![GitHub issues](https://img.shields.io/github/issues/JulienKode/team-labeler-action?style=flat-square)](https://github.com/JulienKode/team-labeler-action/issues)
@@ -11,8 +13,6 @@ This repository provides a **GitHub action** to automatically **team label** on 
 This is useful if multiple team are working on the same project.
 
 ![example](./assets/example.png)
-
-# Team Labeler Action 👥
 
 ## Configuration
 
