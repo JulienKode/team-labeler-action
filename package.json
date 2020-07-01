@@ -38,7 +38,7 @@
     "@types/js-yaml": "3.12.3",
     "@types/node": "12.12.47",
     "@typescript-eslint/parser": "2.30.0",
-    "@zeit/ncc": "0.22.1",
+    "@zeit/ncc": "0.22.3",
     "eslint": "6.8.0",
     "eslint-plugin-github": "2.0.0",
     "eslint-plugin-jest": "23.8.2",
