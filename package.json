@@ -29,7 +29,7 @@
   "author": "Julien Karst",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "1.2.6",
+    "@actions/core": "1.5.0",
     "@actions/github": "2.2.0",
     "js-yaml": "3.14.1"
   },
