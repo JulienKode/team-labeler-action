@@ -52,15 +52,12 @@ async function fetchContent(
         }
       : {...repoConfiguration}
   core.info(`info: getting YAML file from ${source}`)
+
   let response
   try {
     response = await client.repos.getContents(getContestsConfig)
   } catch (e) {
-    core.error('Failed getting file from')
-    core.info(`owner: ${getContestsConfig.owner}`)
-    core.info(`repo: ${getContestsConfig.repo}`)
-    core.info(`path: ${getContestsConfig.path}`)
-    core.info(`ref: ${getContestsConfig.ref}`)
+    core.error('failed connecting to the remote repo')
     throw e
   }
 

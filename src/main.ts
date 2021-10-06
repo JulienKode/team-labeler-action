@@ -9,11 +9,17 @@ import {
 } from './github'
 
 async function run() {
+  const sources = ['remote', 'local']
   try {
     const token = core.getInput('repo-token', {required: true})
     const configPath = core.getInput('configuration-path', {required: true})
     const source = core.getInput('source', {required: true})
-    // support remote files
+    const isValidSource = sources.includes(source)
+    if (!isValidSource) {
+      core.error(`${source} is not a valid source`)
+      throw new Error('Not a valid source')
+    }
+    // support remote files configuration
     const teamFileConfig = {
       owner: core.getInput('owner'),
       repo: core.getInput('repo'),
@@ -33,7 +39,7 @@ async function run() {
       return
     }
 
-    const client = createClient(token)
+    const client = createClient(token) // set token that was sent by the workflow PROJECT or PAT token
     const labelsConfiguration: Map<string, string[]> =
       await getLabelsConfiguration(client, configPath, source, teamFileConfig)
 

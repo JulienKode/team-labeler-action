@@ -2765,7 +2765,7 @@ function run() {
             const token = core.getInput('repo-token', { required: true });
             const configPath = core.getInput('configuration-path', { required: true });
             const source = core.getInput('source', { required: true });
-            // support remote files
+            // support remote files configuration
             const teamFileConfig = {
                 owner: core.getInput('owner'),
                 repo: core.getInput('repo'),
@@ -2782,7 +2782,7 @@ function run() {
                 core.debug('Could not get pull request user from context, exiting');
                 return;
             }
-            const client = github_1.createClient(token);
+            const client = github_1.createClient(token); // set token that was sent by the workflow PROJECT or PAT token
             const labelsConfiguration = yield github_1.getLabelsConfiguration(client, configPath, source, teamFileConfig);
             const labels = teams_1.getTeamLabel(labelsConfiguration, `@${author}`);
             if (labels.length > 0)
@@ -12180,7 +12180,7 @@ function fetchContent(client, repoPath, source, repoConfiguration) {
             response = yield client.repos.getContents(getContestsConfig);
         }
         catch (e) {
-            core.error('Failed getting file from');
+            core.error('Failed getting file with the next info:');
             core.info(`owner: ${getContestsConfig.owner}`);
             core.info(`repo: ${getContestsConfig.repo}`);
             core.info(`path: ${getContestsConfig.path}`);
