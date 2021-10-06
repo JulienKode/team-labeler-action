@@ -1,3 +1,4 @@
+import * as core from '@actions/core'
 import * as github from '@actions/github'
 import * as yaml from 'js-yaml'
 
@@ -50,6 +51,8 @@ async function fetchContent(
           ref: github.context.sha
         }
       : {...repoConfiguration}
+  core.debug(`getting YAML file from ${source}`)
+
   const response = await client.repos.getContents(getContestsConfig)
 
   if (
