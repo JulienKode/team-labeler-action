@@ -2761,10 +2761,16 @@ const teams_1 = __webpack_require__(335);
 const github_1 = __webpack_require__(824);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        const sources = ['remote', 'local'];
         try {
             const token = core.getInput('repo-token', { required: true });
             const configPath = core.getInput('configuration-path', { required: true });
             const source = core.getInput('source', { required: true });
+            const isValidSource = sources.includes(source);
+            if (!isValidSource) {
+                core.error(`${source} is not a valid source`);
+                throw new Error('Not a valid source');
+            }
             // support remote files configuration
             const teamFileConfig = {
                 owner: core.getInput('owner'),
@@ -12180,11 +12186,7 @@ function fetchContent(client, repoPath, source, repoConfiguration) {
             response = yield client.repos.getContents(getContestsConfig);
         }
         catch (e) {
-            core.error('Failed getting file with the next info:');
-            core.info(`owner: ${getContestsConfig.owner}`);
-            core.info(`repo: ${getContestsConfig.repo}`);
-            core.info(`path: ${getContestsConfig.path}`);
-            core.info(`ref: ${getContestsConfig.ref}`);
+            core.error('failed connecting to the remote repo');
             throw e;
         }
         if (!Array.isArray(response.data) &&
