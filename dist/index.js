@@ -12174,9 +12174,19 @@ function fetchContent(client, repoPath, source, repoConfiguration) {
                 ref: github.context.sha
             }
             : Object.assign({}, repoConfiguration);
-        core.debug(`debug: getting YAML file from ${source}`);
         core.info(`info: getting YAML file from ${source}`);
-        const response = yield client.repos.getContents(getContestsConfig);
+        let response;
+        try {
+            response = yield client.repos.getContents(getContestsConfig);
+        }
+        catch (e) {
+            core.error('Failed getting file from');
+            core.info(`owner: ${getContestsConfig.owner}`);
+            core.info(`repo: ${getContestsConfig.repo}`);
+            core.info(`path: ${getContestsConfig.path}`);
+            core.info(`ref: ${getContestsConfig.ref}`);
+            throw e;
+        }
         if (!Array.isArray(response.data) &&
             typeof response.data === 'object' &&
             response.data.content)

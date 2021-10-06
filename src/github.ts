@@ -51,11 +51,18 @@ async function fetchContent(
           ref: github.context.sha
         }
       : {...repoConfiguration}
-
-  core.debug(`debug: getting YAML file from ${source}`)
   core.info(`info: getting YAML file from ${source}`)
-
-  const response = await client.repos.getContents(getContestsConfig)
+  let response
+  try {
+    response = await client.repos.getContents(getContestsConfig)
+  } catch (e) {
+    core.error('Failed getting file from')
+    core.info(`owner: ${getContestsConfig.owner}`)
+    core.info(`repo: ${getContestsConfig.repo}`)
+    core.info(`path: ${getContestsConfig.path}`)
+    core.info(`ref: ${getContestsConfig.ref}`)
+    throw e
+  }
 
   if (
     !Array.isArray(response.data) &&
