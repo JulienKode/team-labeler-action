@@ -9,6 +9,20 @@ inputs:
     description: 'The path for the label configurations'
     required: false
     default: '.github/teams.yml'
+  source:
+    required: false
+    description: remote or local repository
+    default: 'local'
+  repo:
+    required: false
+    description: if source is remote, share the repository name
+  owner:
+    required: false
+    description: if source is remote, share owner of the repo
+  ref:
+    required: false
+    description: if source is remot, share the repository ref
+    default: 'main'
 runs:
   using: 'node12'
   main: 'dist/index.js'

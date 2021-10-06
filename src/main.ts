@@ -12,6 +12,14 @@ async function run() {
   try {
     const token = core.getInput('repo-token', {required: true})
     const configPath = core.getInput('configuration-path', {required: true})
+    const source = core.getInput('source', {required: true})
+    // support remote files
+    const teamFileConfig = {
+      owner: core.getInput('owner'),
+      repo: core.getInput('repo'),
+      path: configPath,
+      ref: core.getInput('ref')
+    }
 
     const prNumber = getPrNumber()
     if (!prNumber) {
@@ -26,10 +34,8 @@ async function run() {
     }
 
     const client = createClient(token)
-    const labelsConfiguration: Map<
-      string,
-      string[]
-    > = await getLabelsConfiguration(client, configPath)
+    const labelsConfiguration: Map<string, string[]> =
+      await getLabelsConfiguration(client, configPath, source, teamFileConfig)
 
     const labels: string[] = getTeamLabel(labelsConfiguration, `@${author}`)
 
