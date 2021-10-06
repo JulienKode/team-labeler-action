@@ -12137,6 +12137,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addLabels = exports.createClient = exports.getLabelsConfiguration = exports.getPrAuthor = exports.getPrNumber = void 0;
+const core = __importStar(__webpack_require__(470));
 const github = __importStar(__webpack_require__(469));
 const yaml = __importStar(__webpack_require__(414));
 function getPrNumber() {
@@ -12173,6 +12174,8 @@ function fetchContent(client, repoPath, source, repoConfiguration) {
                 ref: github.context.sha
             }
             : Object.assign({}, repoConfiguration);
+        core.debug(`debug: getting YAML file from ${source}`);
+        core.info(`info: getting YAML file from ${source}`);
         const response = yield client.repos.getContents(getContestsConfig);
         if (!Array.isArray(response.data) &&
             typeof response.data === 'object' &&

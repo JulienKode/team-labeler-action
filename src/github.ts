@@ -51,7 +51,9 @@ async function fetchContent(
           ref: github.context.sha
         }
       : {...repoConfiguration}
-  core.debug(`getting YAML file from ${source}`)
+
+  core.debug(`debug: getting YAML file from ${source}`)
+  core.info(`info: getting YAML file from ${source}`)
 
   const response = await client.repos.getContents(getContestsConfig)
 
