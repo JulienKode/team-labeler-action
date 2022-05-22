@@ -19,6 +19,25 @@ export function getPrAuthor(): string | undefined {
   return pullRequest.user.login
 }
 
+export async function isUserMemberOfTeam(
+  client: github.GitHub,
+  org: string,
+  teamSlug: string,
+  username: string
+): Promise<boolean> {
+  const response = await client.teams.getMembershipInOrg({
+    org: org,
+    team_slug: teamSlug,
+    username: username
+  })
+
+  if (response.status === 200) {
+    return response.data.state === 'active'
+  } else {
+    return false
+  }
+}
+
 export async function getLabelsConfiguration(
   client: github.GitHub,
   configurationPath: string

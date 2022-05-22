@@ -26,12 +26,14 @@ async function run() {
     }
 
     const client = createClient(token)
-    const labelsConfiguration: Map<
-      string,
-      string[]
-    > = await getLabelsConfiguration(client, configPath)
+    const labelsConfiguration: Map<string, string[]> =
+      await getLabelsConfiguration(client, configPath)
 
-    const labels: string[] = getTeamLabel(labelsConfiguration, `@${author}`)
+    const labels: string[] = await getTeamLabel(
+      labelsConfiguration,
+      author,
+      client
+    )
 
     if (labels.length > 0) await addLabels(client, prNumber, labels)
   } catch (error) {
