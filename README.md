@@ -24,6 +24,7 @@ You need to provide a yml file that contains members of your teams:
 LightSide:
   - '@Yoda'
   - '@Luke'
+  - '@RebelAlliance/jedi'
 
 DarkSide:
   - '@DarkVador'
@@ -35,7 +36,8 @@ DarkSide:
 ### Create `.github/workflows/team-labeler.yml`
 
 Create a workflow (eg: `.github/workflows/team-labeler.yml` see [Creating a Workflow file](https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file)) to utilize the labeler action.
-This action only needs the GITHUB_TOKEN secret as it interacts with the GitHub API to modify labels. The action can be used as such:
+This action only needs the GITHUB_TOKEN secret as it interacts with the GitHub API to modify labels. If you want to create labels based on GitHub team memberships, the GITHUB_TOKEN should be a PAT that can read GitHub teams (`read:org`).
+The action can be used as such:
 
 ```yaml
 on: pull_request
