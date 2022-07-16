@@ -1,4 +1,4 @@
-name: 'Team labeler action'
+name: 'Github Actions for teams - Team labeler action'
 description: "Add a team label based on the author's team"
 author: 'Julien Karst'
 inputs:
