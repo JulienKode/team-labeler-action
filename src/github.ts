@@ -25,7 +25,6 @@ export async function getLabelsConfiguration(
   configurationPath: string,
   teamsRepo: string
 ): Promise<Map<string, string[]>> {
-  core.info('Getting config')
   const configurationContent: string = await fetchContent(
     client,
     configurationPath,
@@ -44,7 +43,6 @@ async function fetchContent(
   core.warning(repo)
   let sha = github.context.sha
   if (teamsRepo !== '') {
-    core.warning('Setting custom repo and branch to main')
     repo = teamsRepo
     sha = 'main'
   }

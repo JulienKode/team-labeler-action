@@ -14,9 +14,6 @@ async function run() {
     const configPath = core.getInput('configuration-path', {required: true})
     const teamsRepo = core.getInput('teams-repo', {required: false})
 
-    core.warning('Running action')
-    core.warning(teamsRepo)
-    core.warning(configPath)
     const prNumber = getPrNumber()
     if (!prNumber) {
       core.debug('Could not get pull request number from context, exiting')

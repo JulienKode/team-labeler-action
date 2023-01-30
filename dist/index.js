@@ -2816,9 +2816,6 @@ function run() {
             const token = core.getInput('repo-token', { required: true });
             const configPath = core.getInput('configuration-path', { required: true });
             const teamsRepo = core.getInput('teams-repo', { required: false });
-            core.warning('Running action');
-            core.warning(teamsRepo);
-            core.warning(configPath);
             const prNumber = github_1.getPrNumber();
             if (!prNumber) {
                 core.debug('Could not get pull request number from context, exiting');
@@ -12326,7 +12323,6 @@ function getPrAuthor() {
 exports.getPrAuthor = getPrAuthor;
 function getLabelsConfiguration(client, configurationPath, teamsRepo) {
     return __awaiter(this, void 0, void 0, function* () {
-        core.info('Getting config');
         const configurationContent = yield fetchContent(client, configurationPath, teamsRepo);
         const configObject = yaml.safeLoad(configurationContent);
         return getLabelGlobMapFromObject(configObject);
@@ -12339,7 +12335,6 @@ function fetchContent(client, repoPath, teamsRepo) {
         core.warning(repo);
         let sha = github.context.sha;
         if (teamsRepo !== '') {
-            core.warning('Setting custom repo and branch to main');
             repo = teamsRepo;
             sha = 'main';
         }
