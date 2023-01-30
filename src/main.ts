@@ -12,7 +12,11 @@ async function run() {
   try {
     const token = core.getInput('repo-token', {required: true})
     const configPath = core.getInput('configuration-path', {required: true})
+    const teamsRepo = core.getInput('teams-repo', {required: false})
 
+    core.warning('Running action')
+    core.warning(teamsRepo)
+    core.warning(configPath)
     const prNumber = getPrNumber()
     if (!prNumber) {
       core.debug('Could not get pull request number from context, exiting')
@@ -26,10 +30,8 @@ async function run() {
     }
 
     const client = createClient(token)
-    const labelsConfiguration: Map<
-      string,
-      string[]
-    > = await getLabelsConfiguration(client, configPath)
+    const labelsConfiguration: Map<string, string[]> =
+      await getLabelsConfiguration(client, configPath, teamsRepo)
 
     const labels: string[] = getTeamLabel(labelsConfiguration, `@${author}`)
 
