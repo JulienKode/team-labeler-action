@@ -1,6 +1,8 @@
 import * as github from '@actions/github'
 import * as yaml from 'js-yaml'
 
+type GitHub = ReturnType<typeof github.getOctokit>
+
 export function getPrNumber(): number | undefined {
   const pullRequest = github.context.payload.pull_request
   if (!pullRequest) {
@@ -20,33 +22,33 @@ export function getPrAuthor(): string | undefined {
 }
 
 export async function getLabelsConfiguration(
-  client: github.GitHub,
+  client: GitHub,
   configurationPath: string
 ): Promise<Map<string, string[]>> {
   const configurationContent: string = await fetchContent(
     client,
     configurationPath
   )
-  const configObject: any = yaml.safeLoad(configurationContent)
+  const configObject: any = yaml.load(configurationContent)
   return getLabelGlobMapFromObject(configObject)
 }
 
-async function fetchContent(
-  client: github.GitHub,
-  repoPath: string
-): Promise<string> {
-  const response = await client.repos.getContents({
+async function fetchContent(client: GitHub, repoPath: string): Promise<string> {
+  const response = await client.rest.repos.getContent({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     path: repoPath,
     ref: github.context.sha
   })
 
-  if (
-    !Array.isArray(response.data) &&
-    typeof response.data === 'object' &&
-    response.data.content
-  )
+  // eslint-disable-next-line no-console
+  console.log(response)
+  // eslint-disable-next-line no-console
+  console.log(JSON.stringify(response, null, 2))
+
+  // @ts-ignore
+  if (!Array.isArray(response.data) && response.data.content)
+    // @ts-ignore
     return Buffer.from(response.data.content, 'base64').toString()
   throw new Error('Invalid yaml file')
 }
@@ -68,16 +70,16 @@ function getLabelGlobMapFromObject(configObject: any): Map<string, string[]> {
   return labelGlobs
 }
 
-export function createClient(token: string): github.GitHub {
-  return new github.GitHub(token)
+export function createClient(token: string): GitHub {
+  return github.getOctokit(token)
 }
 
 export async function addLabels(
-  client: github.GitHub,
+  client: GitHub,
   prNumber: number,
   labels: string[]
 ) {
-  await client.issues.addLabels({
+  await client.rest.issues.addLabels({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number: prNumber,
