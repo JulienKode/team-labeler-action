@@ -10,7 +10,7 @@ inputs:
     required: false
     default: '.github/teams.yml'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
 branding:
   icon: 'users'
