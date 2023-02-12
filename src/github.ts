@@ -41,11 +41,6 @@ async function fetchContent(client: GitHub, repoPath: string): Promise<string> {
     ref: github.context.sha
   })
 
-  // eslint-disable-next-line no-console
-  console.log(response)
-  // eslint-disable-next-line no-console
-  console.log(JSON.stringify(response, null, 2))
-
   // @ts-ignore
   if (!Array.isArray(response.data) && response.data.content)
     // @ts-ignore
