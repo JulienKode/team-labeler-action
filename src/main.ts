@@ -26,17 +26,17 @@ async function run() {
     }
 
     const client = createClient(token)
-    const labelsConfiguration: Map<
-      string,
-      string[]
-    > = await getLabelsConfiguration(client, configPath)
+    const labelsConfiguration: Map<string, string[]> =
+      await getLabelsConfiguration(client, configPath)
 
     const labels: string[] = getTeamLabel(labelsConfiguration, `@${author}`)
 
     if (labels.length > 0) await addLabels(client, prNumber, labels)
   } catch (error) {
-    core.error(error)
-    core.setFailed(error.message)
+    if (error instanceof Error) {
+      core.error(error)
+      core.setFailed(error.message)
+    }
   }
 }
 
