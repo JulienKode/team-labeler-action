@@ -6,7 +6,11 @@ type GitHub = ReturnType<typeof github.getOctokit>
 export function getPrNumber(): number | undefined {
   const pullRequest = github.context.payload.pull_request
   if (!pullRequest) {
-    return undefined
+    const issue = github.context.payload.issue
+    if (!issue) {
+      return undefined
+    }
+    return issue.number
   }
 
   return pullRequest.number
