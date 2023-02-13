@@ -12,6 +12,8 @@ async function run() {
   try {
     const token = core.getInput('repo-token', {required: true})
     const configPath = core.getInput('configuration-path', {required: true})
+    const teamsRepo = core.getInput('teams-repo', {required: false})
+    const teamsBranch = core.getInput('teams-branch', {required: false})
 
     const prNumber = getPrNumber()
     if (!prNumber) {
@@ -27,7 +29,11 @@ async function run() {
 
     const client = createClient(token)
     const labelsConfiguration: Map<string, string[]> =
-      await getLabelsConfiguration(client, configPath)
+      await getLabelsConfiguration(
+        client,
+        configPath,
+        teamsRepo !== '' ? {repo: teamsRepo, ref: teamsBranch} : undefined
+      )
 
     const labels: string[] = getTeamLabel(labelsConfiguration, `@${author}`)
 

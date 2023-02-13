@@ -9,6 +9,14 @@ inputs:
     description: 'The path for the label configurations'
     required: false
     default: '.github/teams.yml'
+  teams-repo:
+    description: 'Get the teams config from another repo'
+    required: false
+    default: ''
+  teams-branch:
+    description: 'To get the teams config from another repo, specify the branch'
+    required: false
+    default: ''
 runs:
   using: 'node16'
   main: 'dist/index.js'

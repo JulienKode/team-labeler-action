@@ -1,5 +1,7 @@
 import * as github from '@actions/github'
 import * as yaml from 'js-yaml'
+import * as core from '@actions/core'
+import {ExternalRepo} from './types'
 
 type GitHub = ReturnType<typeof github.getOctokit>
 
@@ -27,22 +29,36 @@ export function getPrAuthor(): string | undefined {
 
 export async function getLabelsConfiguration(
   client: GitHub,
-  configurationPath: string
+  configurationPath: string,
+  externalRepo: ExternalRepo | undefined
 ): Promise<Map<string, string[]>> {
   const configurationContent: string = await fetchContent(
     client,
-    configurationPath
+    configurationPath,
+    externalRepo
   )
   const configObject: any = yaml.load(configurationContent)
   return getLabelGlobMapFromObject(configObject)
 }
 
-async function fetchContent(client: GitHub, repoPath: string): Promise<string> {
+async function fetchContent(
+  client: GitHub,
+  path: string,
+  externalRepo: ExternalRepo | undefined
+): Promise<string> {
+  let repo = github.context.repo.repo
+  let ref = github.context.sha
+  if (externalRepo?.repo) {
+    repo = externalRepo?.repo
+    ref = externalRepo?.ref
+  }
+
+  core.info(`Using repo ${repo} and ref ${ref}`)
   const response = await client.rest.repos.getContent({
     owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
-    path: repoPath,
-    ref: github.context.sha
+    repo,
+    path,
+    ref
   })
 
   // @ts-ignore
