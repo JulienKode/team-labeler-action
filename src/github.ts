@@ -21,7 +21,11 @@ export function getPrNumber(): number | undefined {
 export function getPrAuthor(): string | undefined {
   const pullRequest = github.context.payload.pull_request
   if (!pullRequest) {
-    return undefined
+    const issue = github.context.payload.issue
+    if (!issue) {
+      return undefined
+    }
+    return issue.user.login
   }
 
   return pullRequest.user.login
