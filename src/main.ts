@@ -17,13 +17,13 @@ async function run() {
 
     const prNumber = getPrNumber()
     if (!prNumber) {
-      core.debug('Could not get pull request number from context, exiting')
+      core.info('Could not get pull request number from context, exiting')
       return
     }
 
     const author = getPrAuthor()
     if (!author) {
-      core.debug('Could not get pull request user from context, exiting')
+      core.info('Could not get pull request user from context, exiting')
       return
     }
 
