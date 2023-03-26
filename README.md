@@ -42,6 +42,9 @@ on:
   pull_request:
   issues:
 name: team-label
+permissions:
+  contents: read
+  pull-requests: write
 jobs:
   team-labeler:
     runs-on: ubuntu-latest
