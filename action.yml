@@ -17,6 +17,9 @@ inputs:
     description: 'To get the teams config from another repo, specify the branch'
     required: false
     default: ''
+outputs:
+  team_labels:
+    description: 'JSON array of team labels for the author'
 runs:
   using: 'node16'
   main: 'dist/index.js'
