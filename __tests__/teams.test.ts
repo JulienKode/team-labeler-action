@@ -26,6 +26,19 @@ test('Should add team label when the author is found', () => {
   expect(output).toEqual(['LightSide'])
 })
 
+test('Should be able to detect users with different username casings', () => {
+  // Given
+  const author = '@Anakin'
+  const labelGlobs = new Map<string, string[]>()
+  labelGlobs.set('LightSide', ['@Yoda', '@ANAKIN'])
+
+  // When
+  const output = getTeamLabel(labelGlobs, author)
+
+  // Expect
+  expect(output).toEqual(['LightSide'])
+})
+
 test('Should be able to detect when a user is in multiple teams', () => {
   // Given
   const author = '@Anakin'
