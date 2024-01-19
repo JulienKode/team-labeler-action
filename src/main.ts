@@ -38,8 +38,10 @@ async function run() {
     const labels: string[] = getTeamLabel(labelsConfiguration, `@${author}`)
 
     core.debug('Adding labels')
+    console.log('Adding labels')
     if (labels.length > 0) await addLabels(client, prNumber, labels)
     core.debug(`Setting output to ${JSON.stringify(labels)}`)
+    console.log(`Setting output to ${JSON.stringify(labels)}`)
     core.setOutput('team_labels', JSON.stringify(labels))
   } catch (error) {
     if (error instanceof Error) {
