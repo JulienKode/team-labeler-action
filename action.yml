@@ -1,6 +1,6 @@
-name: 'Team labeler action'
-description: "Add a team label based on the author's team"
-author: '@JulienKode'
+name: 'Auto reviewer labeler action'
+description: "Add a label based on the reviewers assigned"
+author: '@Shenato'
 inputs:
   repo-token:
     required: true
@@ -8,18 +8,18 @@ inputs:
   configuration-path:
     description: 'The path for the label configurations'
     required: false
-    default: '.github/teams.yml'
-  teams-repo:
-    description: 'Get the teams config from another repo'
+    default: '.github/reviewer_labels.yml'
+  config-repo:
+    description: 'Get the label config from another repo'
     required: false
     default: ''
-  teams-branch:
-    description: 'To get the teams config from another repo, specify the branch'
+  config-repo-branch:
+    description: 'To get the label config from another repo, specify the branch'
     required: false
     default: ''
 outputs:
-  team_labels:
-    description: 'JSON array of team labels for the author'
+  reviewer_labels:
+    description: 'JSON array of labels based on the reviewers'
 runs:
   using: 'node16'
   main: 'dist/index.js'

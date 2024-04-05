@@ -1,33 +1,44 @@
-# Team Labeler Action 👥
+# Auto Reviewer Labeler Action 👥
 
-[![build](https://github.com/JulienKode/team-labeler-action/workflows/build/badge.svg)](https://github.com/JulienKode/team-labeler-action/actions)
-[![test](https://github.com/JulienKode/team-labeler-action/workflows/test/badge.svg)](https://github.com/JulienKode/team-labeler-action/actions)
-[![GitHub issues](https://img.shields.io/github/issues/JulienKode/team-labeler-action?style=flat-square)](https://github.com/JulienKode/team-labeler-action/issues)
-[![GitHub forks](https://img.shields.io/github/forks/JulienKode/team-labeler-action?style=flat-square)](https://github.com/JulienKode/team-labeler-action/network)
-[![GitHub stars](https://img.shields.io/github/stars/JulienKode/team-labeler-action?style=flat-square)](https://github.com/JulienKode/team-labeler-action/stargazers)
-[![GitHub license](https://img.shields.io/github/license/JulienKode/team-labeler-action?style=flat-square)](https://github.com/JulienKode/team-labeler-action/blob/master/LICENSE)
-[![Watch on GitHub](https://img.shields.io/github/watchers/JulienKode/team-labeler-action.svg?style=social)](https://github.com/JulienKode/team-labeler-action/watchers)
-[![Tweet](https://img.shields.io/twitter/url/https/github.com/JulienKode/team-labeler-action.svg?style=social)](https://twitter.com/intent/tweet?text=Checkout%20this%20library%20https%3A%2F%2Fgithub.com%2FJulienKode%2Fteam-labeler-action)
+[![build](https://github.com/Shenato/auto-reviewer-labeler-action/workflows/build/badge.svg)](https://github.com/Shenato/auto-reviewer-labeler-action/actions)
+[![test](https://github.com/Shenato/auto-reviewer-labeler-action/workflows/test/badge.svg)](https://github.com/Shenato/auto-reviewer-labeler-action/actions)
+[![GitHub issues](https://img.shields.io/github/issues/Shenato/auto-reviewer-labeler-action?style=flat-square)](https://github.com/Shenato/auto-reviewer-labeler-action/issues)
+[![GitHub forks](https://img.shields.io/github/forks/Shenato/auto-reviewer-labeler-action?style=flat-square)](https://github.com/Shenato/auto-reviewer-labeler-action/network)
+[![GitHub stars](https://img.shields.io/github/stars/Shenato/auto-reviewer-labeler-action?style=flat-square)](https://github.com/Shenato/auto-reviewer-labeler-action/stargazers)
+[![GitHub license](https://img.shields.io/github/license/Shenato/auto-reviewer-labeler-action?style=flat-square)](https://github.com/Shenato/auto-reviewer-labeler-action/blob/master/LICENSE)
+[![Watch on GitHub](https://img.shields.io/github/watchers/Shenato/auto-reviewer-labeler-action.svg?style=social)](https://github.com/Shenato/auto-reviewer-labeler-action/watchers)
 
-This repository provides a **GitHub action** to automatically **team label** on a **pull request** based author team.
+
+This repository provides a **GitHub action** to automatically **label** a **pull request** based reviewers assigned.
 This is useful if multiple team are working on the same project.
 
 ![example](./assets/example.png)
 
 ## Configuration
 
-### Create `.github/teams.yml`
+### Create `.github/reviewer_labels.yml`
 
-You need to provide a yml file that contains members of your teams:
+You need to provide a yml file that contains the label and a list of the reviewers that assign that label:
 
 ```yaml
-LightSide:
-  - '@Yoda'
-  - '@Luke'
+'Team Light Triaged':
+  assigned:
+    teams:
+      - '@Company/team-light'
+    users:
+      - '@Luke'
+'Team Dark Triaged':
+  assigned:
+    teams:
+      - '@Company/team-dark'
+    users:
+      - '@DarkVador'
+      - '@Palpatine'
 
-DarkSide:
-  - '@DarkVador'
-  - '@Palpatine'
+'Team Light Triaged Approved':
+  approved:
+    teams:
+      - '@Company/team-light'
 ```
 
 ## Usage
@@ -41,15 +52,15 @@ This action only needs the GITHUB_TOKEN secret as it interacts with the GitHub A
 on:
   pull_request:
   issues:
-name: team-label
+name: reviewer-labeler
 permissions:
   contents: read
   pull-requests: write
 jobs:
-  team-labeler:
+  reviewer-labeler:
     runs-on: ubuntu-latest
     steps:
-    - uses: JulienKode/team-labeler-action@v1.1.0
+    - uses: Shenato/auto-team-labeler-action@v1.1.0
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
 ```
