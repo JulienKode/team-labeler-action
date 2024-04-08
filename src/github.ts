@@ -79,6 +79,7 @@ export async function listReviews(
     per_page: 9999999
   })
   const allReviews = reviews.data
+    .filter(review => review.state === 'APPROVED')
     .map(review => review.user?.login ?? '')
     .filter(v => v != '')
   return allReviews
