@@ -102,6 +102,7 @@ function listReviews(client, externalRepo) {
             per_page: 9999999
         });
         const allReviews = reviews.data
+            .filter(review => review.state === 'APPROVED')
             .map(review => { var _a, _b; return (_b = (_a = review.user) === null || _a === void 0 ? void 0 : _a.login) !== null && _b !== void 0 ? _b : ''; })
             .filter(v => v != '');
         return allReviews;
