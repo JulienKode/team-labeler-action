@@ -21,7 +21,7 @@ outputs:
   team_labels:
     description: 'JSON array of team labels for the author'
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
 branding:
   icon: 'users'
