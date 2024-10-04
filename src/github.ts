@@ -72,18 +72,23 @@ async function fetchContent(
   throw new Error('Invalid yaml file')
 }
 
-function getLabelGlobMapFromObject(configObject: any): Map<string, string[]> {
+// This function is changed to support the new team.yml file format
+function getLabelGlobMapFromObject(
+  configObject: Map<string, {github: string; email: string}[]>
+): Map<string, string[]> {
   const labelGlobs: Map<string, string[]> = new Map()
-  for (const label in configObject) {
-    if (typeof configObject[label] === 'string') {
-      labelGlobs.set(label, [configObject[label]])
-    } else if (configObject[label] instanceof Array) {
-      labelGlobs.set(label, configObject[label])
-    } else {
+
+  for (const [label, entries] of Object.entries(configObject)) {
+    // We currently don't support Array as key, so we can safely assume that label is a string
+    if (typeof label !== 'string') {
       throw Error(
         `found unexpected type for label ${label} (should be string or array of globs)`
       )
     }
+
+    // We are modifying the team.yml file to have the github user name and email as properties
+    const userName = entries.map(entry => entry.githubUsername)
+    labelGlobs.set(label, userName)
   }
 
   return labelGlobs
