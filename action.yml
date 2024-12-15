@@ -17,6 +17,9 @@ inputs:
     description: 'To get the teams config from another repo, specify the branch'
     required: false
     default: ''
+  org-token:
+    description: 'The organization-level token for reading team memberships'
+    required: false
 outputs:
   team_labels:
     description: 'JSON array of team labels for the author'
