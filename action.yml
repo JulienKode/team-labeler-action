@@ -1,6 +1,6 @@
 name: 'Team labeler action'
 description: "Add a team label based on the author's team"
-author: '@JulienKode'
+author: '@anuccio'
 inputs:
   repo-token:
     required: true
