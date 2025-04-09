@@ -31,8 +31,6 @@ async function run() {
 
     const client = createClient(token)
     const orgClient = orgToken ? createClient(orgToken) : null
-    core.debug(`Using org-token: ${orgToken ? 'Yes' : 'No'}`)
-
     const labelsConfiguration: Map<string, string[]> =
       await getLabelsConfiguration(
         client,
@@ -40,31 +38,13 @@ async function run() {
         teamsRepo !== '' ? {repo: teamsRepo, ref: teamsBranch} : undefined
       )
 
-    // Debug log all labels configuration
-    core.debug('Labels configuration:')
-    for (const [label, patterns] of labelsConfiguration.entries()) {
-      core.debug(`  ${label}: ${JSON.stringify(patterns)}`)
-    }
-
     const userTeams = await getUserTeams(orgClient)
-    core.debug(`User teams (${userTeams.length}): ${JSON.stringify(userTeams)}`)
-
     const labels: string[] = getTeamLabel(labelsConfiguration, `@${author}`)
-    core.debug(`Direct user labels for @${author}: ${JSON.stringify(labels)}`)
-
     const teamLabels: string[] = userTeams
-      .map(userTeam => {
-        const teamMatchLabels = getTeamLabel(labelsConfiguration, userTeam)
-        core.debug(
-          `Labels for team ${userTeam}: ${JSON.stringify(teamMatchLabels)}`
-        )
-        return teamMatchLabels
-      })
+      .map(userTeam => getTeamLabel(labelsConfiguration, userTeam))
       .flat()
-    core.debug(`Team-based labels: ${JSON.stringify(teamLabels)}`)
 
     const allLabels = [...new Set([...labels, ...teamLabels])]
-    core.debug(`Final labels to apply: ${JSON.stringify(allLabels)}`)
 
     if (allLabels.length > 0) await addLabels(client, prNumber, allLabels)
     core.setOutput('team_labels', JSON.stringify(allLabels))
