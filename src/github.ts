@@ -36,12 +36,17 @@ export async function getLabelsConfiguration(
   configurationPath: string,
   externalRepo: ExternalRepo | undefined
 ): Promise<Map<string, string[]>> {
+  core.debug(`Loading configuration from ${configurationPath}`)
   const configurationContent: string = await fetchContent(
     client,
     configurationPath,
     externalRepo
   )
+  core.debug(`Configuration content:\n${configurationContent}`)
+
   const configObject: any = yaml.load(configurationContent)
+  core.debug(`Parsed configuration: ${JSON.stringify(configObject, null, 2)}`)
+
   return getLabelGlobMapFromObject(configObject)
 }
 
@@ -108,16 +113,30 @@ export async function addLabels(
 
 export async function getUserTeams(client: GitHub | null): Promise<string[]> {
   if (!client) {
+    core.debug('No org client provided, skipping team lookup')
     return []
   }
 
   try {
+    core.debug('Fetching teams for authenticated user...')
     const response = await client.rest.teams.listForAuthenticatedUser()
-    return response.data.map(team => `@${team.organization.login}/${team.slug}`)
+    core.debug(`Found ${response.data.length} teams`)
+
+    const teams = response.data.map(team => {
+      const teamName = `@${team.organization.login}/${team.slug}`
+      core.debug(`Team found: ${teamName}`)
+      return teamName
+    })
+
+    core.debug(`Final team list: ${JSON.stringify(teams)}`)
+    return teams
   } catch (error) {
     core.warning(
       'Failed to fetch user teams. Ensure the org-token has the necessary permissions.'
     )
+    if (error instanceof Error) {
+      core.debug(`Error details: ${error.message}`)
+    }
     return []
   }
 }
