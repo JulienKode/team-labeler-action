@@ -5,6 +5,10 @@ import {ExternalRepo} from './types'
 
 type GitHub = ReturnType<typeof github.getOctokit>
 
+interface LabelConfiguration {
+  [key: string]: string | string[]
+}
+
 export function getPrNumber(): number | undefined {
   const pullRequest = github.context.payload.pull_request
   if (!pullRequest) {
@@ -41,7 +45,9 @@ export async function getLabelsConfiguration(
     configurationPath,
     externalRepo
   )
-  const configObject: any = yaml.load(configurationContent)
+  const configObject: LabelConfiguration = yaml.load(
+    configurationContent
+  ) as LabelConfiguration
   return getLabelGlobMapFromObject(configObject)
 }
 
@@ -72,13 +78,15 @@ async function fetchContent(
   throw new Error('Invalid yaml file')
 }
 
-function getLabelGlobMapFromObject(configObject: any): Map<string, string[]> {
+function getLabelGlobMapFromObject(
+  configObject: LabelConfiguration
+): Map<string, string[]> {
   const labelGlobs: Map<string, string[]> = new Map()
   for (const label in configObject) {
     if (typeof configObject[label] === 'string') {
-      labelGlobs.set(label, [configObject[label]])
-    } else if (configObject[label] instanceof Array) {
-      labelGlobs.set(label, configObject[label])
+      labelGlobs.set(label, [configObject[label] as string])
+    } else if (Array.isArray(configObject[label])) {
+      labelGlobs.set(label, configObject[label] as string[])
     } else {
       throw Error(
         `found unexpected type for label ${label} (should be string or array of globs)`
@@ -114,7 +122,7 @@ export async function getUserTeams(client: GitHub | null): Promise<string[]> {
   try {
     const response = await client.rest.teams.listForAuthenticatedUser()
     return response.data.map(team => `@${team.organization.login}/${team.slug}`)
-  } catch (error) {
+  } catch (_error) {
     core.warning(
       'Failed to fetch user teams. Ensure the org-token has the necessary permissions.'
     )
