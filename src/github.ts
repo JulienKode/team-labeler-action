@@ -105,3 +105,19 @@ export async function addLabels(
     labels
   })
 }
+
+export async function getUserTeams(client: GitHub | null): Promise<string[]> {
+  if (!client) {
+    return []
+  }
+
+  try {
+    const response = await client.rest.teams.listForAuthenticatedUser()
+    return response.data.map(team => `@${team.organization.login}/${team.slug}`)
+  } catch (error) {
+    core.warning(
+      'Failed to fetch user teams. Ensure the org-token has the necessary permissions.'
+    )
+    return []
+  }
+}
