@@ -30,6 +30,20 @@ DarkSide:
   - '@Palpatine'
 ```
 
+### GitHub Team Support
+
+You can also use GitHub team names to automatically apply labels based on team membership. To do this:
+
+Include team names in your configuration using the format `@organization/team-slug`:
+
+```yaml
+FrontendTeam:
+  - '@YourOrg/frontend'
+  
+BackendTeam:
+  - '@YourOrg/backend'
+```
+
 ## Usage
 
 ### Create `.github/workflows/team-labeler.yml`
@@ -45,6 +59,7 @@ name: team-label
 permissions:
   contents: read
   pull-requests: write
+  issues: write # Necessary to create the labels if they do not exist yet.
 jobs:
   team-labeler:
     runs-on: ubuntu-latest
@@ -52,5 +67,21 @@ jobs:
     - uses: JulienKode/team-labeler-action@v1.1.0
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        # Optional: Add if you want to use GitHub team-based labeling
+        org-token: "${{ secrets.ORG_TOKEN }}"
 ```
+
+## Required Permissions
+
+1. **For basic functionality**, the workflow needs:
+   - `contents: read`
+   - `pull-requests: write` (to apply labels to pull requests)
+   - `issues: write` (to apply labels to issues and create labels if they do not exist yet)
+
+2. **For GitHub team integration**, you need to:
+   - Create a Personal Access Token with `read:org` permission
+   - Add this token as a repository secret (e.g., `ORG_TOKEN`)
+   - Pass this token to the action using the `org-token` parameter
+
+> Note: While the `issues:write` permission does allow for creating labels through GitHub's API.
 
