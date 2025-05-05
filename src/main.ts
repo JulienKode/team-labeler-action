@@ -38,7 +38,7 @@ async function run() {
         teamsRepo !== '' ? {repo: teamsRepo, ref: teamsBranch} : undefined
       )
 
-    const userTeams = await getUserTeams(orgClient)
+    const userTeams = await getUserTeams(orgClient, author)
     const labels: string[] = getTeamLabel(labelsConfiguration, `@${author}`)
     const teamLabels: string[] = userTeams
       .map(userTeam => getTeamLabel(labelsConfiguration, userTeam))
