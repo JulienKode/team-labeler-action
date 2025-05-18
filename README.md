@@ -64,7 +64,7 @@ jobs:
   team-labeler:
     runs-on: ubuntu-latest
     steps:
-    - uses: JulienKode/team-labeler-action@v2.0.0
+    - uses: JulienKode/team-labeler-action@v2.0.1
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
         # Optional: Add if you want to use GitHub team-based labeling
