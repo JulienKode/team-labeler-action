@@ -42,7 +42,7 @@
     "@typescript-eslint/eslint-plugin": "8.32.1",
     "@typescript-eslint/parser": "8.35.1",
     "@vercel/ncc": "0.38.3",
-    "eslint": "9.28.0",
+    "eslint": "9.31.0",
     "eslint-plugin-jest": "28.12.0",
     "eslint-plugin-prettier": "5.5.1",
     "globals": "16.2.0",
