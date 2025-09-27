@@ -9,6 +9,10 @@ interface LabelConfiguration {
   [key: string]: string | string[]
 }
 
+interface Logger {
+  warning(message: string): void
+}
+
 export function getPrNumber(): number | undefined {
   const pullRequest = github.context.payload.pull_request
   if (!pullRequest) {
@@ -114,40 +118,56 @@ export async function addLabels(
   })
 }
 
-export async function getUserTeams(
+export async function getUserTeamsWithDeps(
   client: GitHub | null,
-  author: string
+  author: string,
+  orgName: string,
+  logger?: Logger
 ): Promise<string[]> {
   if (!client) {
     return []
   }
 
   try {
-    // Get all teams in the org of the current repo
-    const response = await client.rest.teams.list({
-      org: github.context.repo.owner
+    // Get all teams in the org using pagination
+    const teams = await client.paginate(client.rest.teams.list, {
+      org: orgName,
+      per_page: 100
     })
 
-    // For all teams, get their members
-    const members = await Promise.all(
-      response.data.map(team =>
-        client.rest.teams.listMembersInOrg({
-          org: github.context.repo.owner,
-          team_slug: team.slug
-        })
+    // Filter teams by checking if the author is a member
+    const userTeams: Array<{slug: string}> = []
+
+    for (const team of teams) {
+      // Check if the author is a member of this team using pagination
+      const members = await client.paginate(
+        client.rest.teams.listMembersInOrg,
+        {
+          org: orgName,
+          team_slug: team.slug,
+          per_page: 100
+        }
       )
-    )
 
-    // For each team, check if the user that opened the PR is a member
-    const userTeams = response.data.filter((_, index) =>
-      members[index].data.some(member => member.login === author)
-    )
+      if (members.some(member => member.login === author)) {
+        userTeams.push(team)
+      }
+    }
 
-    return userTeams.map(team => `@${github.context.repo.owner}/${team.slug}`)
+    return userTeams.map(team => `@${orgName}/${team.slug}`)
   } catch (_error) {
-    core.warning(
-      'Failed to fetch user teams. Ensure the org-token has the necessary permissions.'
-    )
+    if (logger) {
+      logger.warning(
+        'Failed to fetch user teams. Ensure the org-token has the necessary permissions.'
+      )
+    }
     return []
   }
+}
+
+export async function getUserTeams(
+  client: GitHub | null,
+  author: string
+): Promise<string[]> {
+  return getUserTeamsWithDeps(client, author, github.context.repo.owner, core)
 }
