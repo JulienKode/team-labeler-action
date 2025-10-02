@@ -781,11 +781,6 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
-"@eslint/js@9.30.0":
-  version "9.30.0"
-  resolved "https://registry.yarnpkg.com/@eslint/js/-/js-9.30.0.tgz#c396fa450d5505dd9b7b8846b33f0491aebd9a2d"
-  integrity sha512-Wzw3wQwPvc9sHM+NjakWTcPx11mbZyiYHuwWa/QfZ7cIRX7WK54PSk7bdyXDaoaopUcMatv1zaQvOAAO8hCdww==
-
 "@eslint/js@9.36.0":
   version "9.36.0"
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-9.36.0.tgz#b1a3893dd6ce2defed5fd49de805ba40368e8fef"
