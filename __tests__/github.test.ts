@@ -24,7 +24,11 @@ const createMockLogger = () => ({
   warning: jest.fn()
 })
 
-const setupPaginateMock = (mockClient: any, teamsResponse: any[], membershipMap: Record<string, any[]>) => {
+const setupPaginateMock = (
+  mockClient: any,
+  teamsResponse: any[],
+  membershipMap: Record<string, any[]>
+) => {
   mockClient.paginate.mockImplementation((method: any, params: any) => {
     if (method === mockClient.rest.teams.list) {
       return Promise.resolve(teamsResponse)
@@ -81,7 +85,12 @@ describe('getUserTeamsWithDeps', () => {
       setupPaginateMock(mockClient, allTeams, membershipMap)
 
       // WHEN
-      const result = await getUserTeamsWithDeps(mockClient, TEST_USER, TEST_ORG, mockLogger)
+      const result = await getUserTeamsWithDeps(
+        mockClient,
+        TEST_USER,
+        TEST_ORG,
+        mockLogger
+      )
 
       // THEN
       expect(result).toHaveLength(4)
@@ -111,7 +120,7 @@ describe('getUserTeamsWithDeps', () => {
         ...Array.from({length: 49}, (_, i) => createMockUser(`user-${i}`)),
         createMockUser(TEST_USER)
       ]
-      
+
       const membershipMap = {
         'large-team': largeTeamMembers,
         'small-team': [createMockUser('otheruser')]
@@ -120,7 +129,12 @@ describe('getUserTeamsWithDeps', () => {
       setupPaginateMock(mockClient, teams, membershipMap)
 
       // WHEN
-      const result = await getUserTeamsWithDeps(mockClient, TEST_USER, 'my-org', mockLogger)
+      const result = await getUserTeamsWithDeps(
+        mockClient,
+        TEST_USER,
+        'my-org',
+        mockLogger
+      )
 
       // THEN
       expect(result).toHaveLength(1)
@@ -135,7 +149,12 @@ describe('getUserTeamsWithDeps', () => {
       mockClient.paginate.mockRejectedValue(apiError)
 
       // WHEN
-      const result = await getUserTeamsWithDeps(mockClient, TEST_USER, TEST_ORG, mockLogger)
+      const result = await getUserTeamsWithDeps(
+        mockClient,
+        TEST_USER,
+        TEST_ORG,
+        mockLogger
+      )
 
       // THEN
       expect(result).toEqual([])
@@ -164,7 +183,7 @@ describe('getUserTeamsWithDeps', () => {
         createMockTeam('team-1', 'Team 1'),
         createMockTeam('team-2', 'Team 2')
       ]
-      
+
       const membershipMap = {
         'team-1': [createMockUser('otheruser')],
         'team-2': [createMockUser('anotheruser')]
@@ -173,7 +192,12 @@ describe('getUserTeamsWithDeps', () => {
       setupPaginateMock(mockClient, teams, membershipMap)
 
       // WHEN
-      const result = await getUserTeamsWithDeps(mockClient, TEST_USER, TEST_ORG, mockLogger)
+      const result = await getUserTeamsWithDeps(
+        mockClient,
+        TEST_USER,
+        TEST_ORG,
+        mockLogger
+      )
 
       // THEN
       expect(result).toEqual([])
@@ -203,7 +227,12 @@ describe('getUserTeamsWithDeps', () => {
       })
 
       // WHEN
-      const result = await getUserTeamsWithDeps(mockClient, TEST_USER, customOrg, mockLogger)
+      const result = await getUserTeamsWithDeps(
+        mockClient,
+        TEST_USER,
+        customOrg,
+        mockLogger
+      )
 
       // THEN
       expect(result).toEqual(['@custom-org/awesome-team'])
@@ -216,7 +245,12 @@ describe('getUserTeamsWithDeps', () => {
       setupPaginateMock(mockClient, [], {})
 
       // WHEN
-      const result = await getUserTeamsWithDeps(mockClient, TEST_USER, TEST_ORG, mockLogger)
+      const result = await getUserTeamsWithDeps(
+        mockClient,
+        TEST_USER,
+        TEST_ORG,
+        mockLogger
+      )
 
       // THEN
       expect(result).toEqual([])
