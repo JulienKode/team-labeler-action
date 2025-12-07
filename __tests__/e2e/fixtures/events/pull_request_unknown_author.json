@@ -1,0 +1,27 @@
+{
+  "action": "opened",
+  "number": 55,
+  "pull_request": {
+    "number": 55,
+    "title": "Some changes",
+    "user": {
+      "login": "UnknownUser"
+    },
+    "head": {
+      "sha": "def456"
+    },
+    "base": {
+      "ref": "main"
+    }
+  },
+  "repository": {
+    "name": "team-labeler-action",
+    "owner": {
+      "login": "test-org"
+    },
+    "full_name": "test-org/team-labeler-action"
+  }
+}
+
+
+

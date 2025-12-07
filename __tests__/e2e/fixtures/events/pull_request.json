@@ -1,0 +1,27 @@
+{
+  "action": "opened",
+  "number": 42,
+  "pull_request": {
+    "number": 42,
+    "title": "Add new feature",
+    "user": {
+      "login": "Anakin"
+    },
+    "head": {
+      "sha": "abc123"
+    },
+    "base": {
+      "ref": "main"
+    }
+  },
+  "repository": {
+    "name": "team-labeler-action",
+    "owner": {
+      "login": "test-org"
+    },
+    "full_name": "test-org/team-labeler-action"
+  }
+}
+
+
+

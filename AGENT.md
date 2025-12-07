@@ -11,14 +11,14 @@ This is a GitHub Action that automatically labels pull requests and issues based
 ### Standard Development Cycle
 ```bash
 # After making changes to src/
-yarn build        # Compile TS → JS (lib/)
-yarn test         # Verify tests pass
-yarn package      # Bundle with ncc (dist/)
+pnpm build        # Compile TS → JS (lib/)
+pnpm test         # Verify tests pass
+pnpm package      # Bundle with ncc (dist/)
 ```
 
 ### Quick Development
 ```bash
-yarn all          # Build + format + lint + package + test
+pnpm all          # Build + format + lint + package + test
 ```
 
 ### Testing Specific Scenarios

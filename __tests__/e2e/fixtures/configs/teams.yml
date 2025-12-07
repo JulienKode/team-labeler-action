@@ -1,0 +1,18 @@
+# Team labeler configuration
+# Maps labels to team members or GitHub team slugs
+
+LightSide:
+  - "@Yoda"
+  - "@Anakin"
+  - "@ObiWan"
+
+DarkSide:
+  - "@Palpatine"
+  - "@Anakin"
+
+Droids:
+  - "@R2D2"
+  - "@C3PO"
+
+
+

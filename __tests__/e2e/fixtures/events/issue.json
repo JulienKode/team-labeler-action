@@ -1,0 +1,20 @@
+{
+  "action": "opened",
+  "issue": {
+    "number": 100,
+    "title": "Bug report",
+    "user": {
+      "login": "Yoda"
+    }
+  },
+  "repository": {
+    "name": "team-labeler-action",
+    "owner": {
+      "login": "test-org"
+    },
+    "full_name": "test-org/team-labeler-action"
+  }
+}
+
+
+
