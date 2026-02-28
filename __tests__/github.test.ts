@@ -1,3 +1,4 @@
+import {describe, it, expect, beforeEach, vi} from 'vitest'
 import {getUserTeamsWithDeps} from '../src/github'
 
 const TEST_USER = 'testuser'
@@ -11,17 +12,17 @@ const createMockTeam = (slug: string, name?: string) => ({
 const createMockUser = (login: string) => ({login})
 
 const createMockClient = () => ({
-  paginate: jest.fn(),
+  paginate: vi.fn(),
   rest: {
     teams: {
-      list: jest.fn(),
-      listMembersInOrg: jest.fn()
+      list: vi.fn(),
+      listMembersInOrg: vi.fn()
     }
   }
 })
 
 const createMockLogger = () => ({
-  warning: jest.fn()
+  warning: vi.fn()
 })
 
 const setupPaginateMock = (
