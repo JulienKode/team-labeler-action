@@ -12,8 +12,8 @@
     "package": "ncc build",
     "test": "vitest run",
     "test:e2e": "vitest run --config vitest.config.e2e.ts",
-    "build:pack": "yarn build && yarn package",
-    "all": "yarn build && yarn format && yarn lint && yarn package && yarn test"
+    "build:pack": "pnpm build && pnpm package",
+    "all": "pnpm build && pnpm format && pnpm lint && pnpm package && pnpm test"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,10 @@
   ],
   "author": "Julien Karst",
   "license": "MIT",
+  "packageManager": "pnpm@10.25.0",
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "msw"]
+  },
   "dependencies": {
     "@actions/core": "1.11.1",
     "@actions/github": "6.0.1",
