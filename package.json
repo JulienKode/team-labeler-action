@@ -31,7 +31,14 @@
   "license": "MIT",
   "packageManager": "pnpm@10.25.0",
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild", "msw"]
+    "onlyBuiltDependencies": ["esbuild", "msw"],
+    "overrides": {
+      "@octokit/core>@octokit/types": "13.6.1",
+      "@octokit/request>@octokit/types": "13.6.1",
+      "@octokit/graphql>@octokit/types": "13.6.1",
+      "@octokit/endpoint>@octokit/types": "13.6.1",
+      "@octokit/request-error>@octokit/types": "13.6.1"
+    }
   },
   "dependencies": {
     "@actions/core": "1.11.1",
