@@ -1,5 +1,5 @@
 import {test, expect} from 'vitest'
-import {getTeamLabel} from '../src/teams.js'
+import {getTeamLabel} from '../src/teams'
 
 test('Should return an empty array if the author is not in a team', () => {
   // Given

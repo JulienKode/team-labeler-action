@@ -1,5 +1,5 @@
 import {describe, it, expect, beforeEach, vi} from 'vitest'
-import {getUserTeamsWithDeps} from '../src/github.js'
+import {getUserTeamsWithDeps} from '../src/github'
 
 const TEST_USER = 'testuser'
 const TEST_ORG = 'test-org'

@@ -1,7 +1,7 @@
 import * as github from '@actions/github'
 import * as yaml from 'js-yaml'
 import * as core from '@actions/core'
-import {ExternalRepo} from './types.js'
+import {ExternalRepo} from './types'
 
 type GitHub = ReturnType<typeof github.getOctokit>
 
