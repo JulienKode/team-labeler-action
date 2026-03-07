@@ -25,17 +25,21 @@ const createMockLogger = () => ({
   warning: vi.fn()
 })
 
+type MockClient = ReturnType<typeof createMockClient>
+type MockTeam = ReturnType<typeof createMockTeam>
+type MockUser = ReturnType<typeof createMockUser>
+
 const setupPaginateMock = (
-  mockClient: any,
-  teamsResponse: any[],
-  membershipMap: Record<string, any[]>
+  client: MockClient,
+  teamsResponse: MockTeam[],
+  membershipMap: Record<string, MockUser[]>
 ) => {
-  mockClient.paginate.mockImplementation((method: any, params: any) => {
-    if (method === mockClient.rest.teams.list) {
+  client.paginate.mockImplementation((method: unknown, params: Record<string, unknown>) => {
+    if (method === client.rest.teams.list) {
       return Promise.resolve(teamsResponse)
     }
-    if (method === mockClient.rest.teams.listMembersInOrg) {
-      const teamSlug = params.team_slug
+    if (method === client.rest.teams.listMembersInOrg) {
+      const teamSlug = String(params.team_slug)
       return Promise.resolve(membershipMap[teamSlug] || [])
     }
     return Promise.resolve([])
@@ -43,7 +47,7 @@ const setupPaginateMock = (
 }
 
 describe('getUserTeamsWithDeps', () => {
-  let mockClient: any
+  let mockClient: MockClient
   let mockLogger: ReturnType<typeof createMockLogger>
 
   beforeEach(() => {
@@ -73,7 +77,7 @@ describe('getUserTeamsWithDeps', () => {
         ...Array.from({length: 31}, (_, i) => createMockTeam(`team-${i}`))
       ]
 
-      const membershipMap: Record<string, any[]> = {}
+      const membershipMap: Record<string, MockUser[]> = {}
       userTeamSlugs.forEach(slug => {
         membershipMap[slug] = [createMockUser(TEST_USER)]
       })
@@ -215,14 +219,14 @@ describe('getUserTeamsWithDeps', () => {
         'awesome-team': [createMockUser(TEST_USER)]
       }
 
-      mockClient.paginate.mockImplementation((method: any, params: any) => {
+      mockClient.paginate.mockImplementation((method: unknown, params: Record<string, unknown>) => {
         if (method === mockClient.rest.teams.list) {
           expect(params.org).toBe(customOrg)
           return Promise.resolve(teams)
         }
         if (method === mockClient.rest.teams.listMembersInOrg) {
           expect(params.org).toBe(customOrg)
-          return Promise.resolve(membershipMap[params.team_slug] || [])
+          return Promise.resolve(membershipMap[String(params.team_slug)] || [])
         }
         return Promise.resolve([])
       })
