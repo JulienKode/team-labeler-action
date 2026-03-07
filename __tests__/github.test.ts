@@ -34,16 +34,18 @@ const setupPaginateMock = (
   teamsResponse: MockTeam[],
   membershipMap: Record<string, MockUser[]>
 ) => {
-  client.paginate.mockImplementation((method: unknown, params: Record<string, unknown>) => {
-    if (method === client.rest.teams.list) {
-      return Promise.resolve(teamsResponse)
+  client.paginate.mockImplementation(
+    (method: unknown, params: Record<string, unknown>) => {
+      if (method === client.rest.teams.list) {
+        return Promise.resolve(teamsResponse)
+      }
+      if (method === client.rest.teams.listMembersInOrg) {
+        const teamSlug = String(params.team_slug)
+        return Promise.resolve(membershipMap[teamSlug] || [])
+      }
+      return Promise.resolve([])
     }
-    if (method === client.rest.teams.listMembersInOrg) {
-      const teamSlug = String(params.team_slug)
-      return Promise.resolve(membershipMap[teamSlug] || [])
-    }
-    return Promise.resolve([])
-  })
+  )
 }
 
 describe('getUserTeamsWithDeps', () => {
@@ -219,17 +221,21 @@ describe('getUserTeamsWithDeps', () => {
         'awesome-team': [createMockUser(TEST_USER)]
       }
 
-      mockClient.paginate.mockImplementation((method: unknown, params: Record<string, unknown>) => {
-        if (method === mockClient.rest.teams.list) {
-          expect(params.org).toBe(customOrg)
-          return Promise.resolve(teams)
+      mockClient.paginate.mockImplementation(
+        (method: unknown, params: Record<string, unknown>) => {
+          if (method === mockClient.rest.teams.list) {
+            expect(params.org).toBe(customOrg)
+            return Promise.resolve(teams)
+          }
+          if (method === mockClient.rest.teams.listMembersInOrg) {
+            expect(params.org).toBe(customOrg)
+            return Promise.resolve(
+              membershipMap[String(params.team_slug)] || []
+            )
+          }
+          return Promise.resolve([])
         }
-        if (method === mockClient.rest.teams.listMembersInOrg) {
-          expect(params.org).toBe(customOrg)
-          return Promise.resolve(membershipMap[String(params.team_slug)] || [])
-        }
-        return Promise.resolve([])
-      })
+      )
 
       // WHEN
       const result = await getUserTeamsWithDeps(
