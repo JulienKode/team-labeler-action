@@ -1,14 +1,9 @@
-import {describe, test, expect, beforeAll, beforeEach, afterAll, afterEach, vi} from 'vitest'
-import {http, HttpResponse} from 'msw'
-import {setupServer} from 'msw/node'
+import {describe, test, expect, beforeEach, afterEach, vi} from 'vitest'
+import {MockAgent, setGlobalDispatcher} from 'undici'
 import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path'
 import * as github from '@actions/github'
-
-// ── MSW Server ──
-
-const server = setupServer()
 
 // ── Helpers ──
 
@@ -40,60 +35,19 @@ function parseOutput(filePath: string): Record<string, string> {
   return outputs
 }
 
-function configHandler(yamlContent: string) {
-  return http.get(
-    'https://api.github.com/repos/test-owner/test-repo/contents/:path',
-    () =>
-      HttpResponse.json({
-        content: Buffer.from(yamlContent).toString('base64'),
-        encoding: 'base64'
-      })
-  )
-}
-
-function labelsHandler(
-  issueNumber: number,
-  capture?: (body: unknown) => void
-) {
-  return http.post(
-    `https://api.github.com/repos/test-owner/test-repo/issues/${issueNumber}/labels`,
-    async ({request}) => {
-      const body = await request.json()
-      if (capture) capture(body)
-      return HttpResponse.json([])
-    }
-  )
-}
-
-function teamsHandler(teams: Array<{slug: string; name: string}>) {
-  return http.get('https://api.github.com/orgs/test-owner/teams', () =>
-    HttpResponse.json(teams)
-  )
-}
-
-function membersHandler(membersByTeam: Record<string, string[]>) {
-  return http.get(
-    'https://api.github.com/orgs/test-owner/teams/:slug/members',
-    ({params}) => {
-      const slug = params.slug as string
-      return HttpResponse.json(
-        (membersByTeam[slug] ?? []).map(login => ({login}))
-      )
-    }
-  )
-}
-
 // ── Tests ──
 
 describe('E2E: team-labeler-action', () => {
   let tmpDir: string
   let outputPath: string
   let stdoutWrites: string[]
-
-  beforeAll(() => server.listen({onUnhandledRequest: 'bypass'}))
-  afterAll(() => server.close())
+  let mockAgent: MockAgent
 
   beforeEach(() => {
+    mockAgent = new MockAgent()
+    mockAgent.disableNetConnect()
+    setGlobalDispatcher(mockAgent)
+
     tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'e2e-'))
     outputPath = path.join(tmpDir, 'output')
     fs.writeFileSync(outputPath, '')
@@ -113,8 +67,8 @@ describe('E2E: team-labeler-action', () => {
     )
   })
 
-  afterEach(() => {
-    server.resetHandlers()
+  afterEach(async () => {
+    await mockAgent.close()
     vi.unstubAllEnvs()
     vi.restoreAllMocks()
     fs.rmSync(tmpDir, {recursive: true, force: true})
@@ -137,15 +91,80 @@ describe('E2E: team-labeler-action', () => {
     github.context.payload = {issue: {number, user: {login: user}}}
   }
 
+  function setupConfigHandler(pool: ReturnType<MockAgent['get']>, yamlContent: string) {
+    pool
+      .intercept({
+        path: /^\/repos\/test-owner\/test-repo\/contents\/.+/,
+        method: 'GET'
+      })
+      .reply(200, {
+        content: Buffer.from(yamlContent).toString('base64'),
+        encoding: 'base64'
+      }, {headers: {'content-type': 'application/json'}})
+  }
+
+  function setupLabelsHandler(
+    pool: ReturnType<MockAgent['get']>,
+    issueNumber: number,
+    capture?: (body: unknown) => void
+  ) {
+    pool
+      .intercept({
+        path: `/repos/test-owner/test-repo/issues/${issueNumber}/labels`,
+        method: 'POST'
+      })
+      .reply(opts => {
+        if (capture && opts.body) {
+          capture(JSON.parse(String(opts.body)))
+        }
+        return {
+          statusCode: 200,
+          data: [],
+          responseOptions: {headers: {'content-type': 'application/json'}}
+        }
+      })
+  }
+
+  function setupTeamsHandler(
+    pool: ReturnType<MockAgent['get']>,
+    teams: Array<{slug: string; name: string}>
+  ) {
+    pool
+      .intercept({
+        path: /^\/orgs\/test-owner\/teams(\?.*)?$/,
+        method: 'GET'
+      })
+      .reply(200, teams, {headers: {'content-type': 'application/json'}})
+  }
+
+  function setupMembersHandler(
+    pool: ReturnType<MockAgent['get']>,
+    membersByTeam: Record<string, string[]>
+  ) {
+    pool
+      .intercept({
+        path: (p: string) => /^\/orgs\/test-owner\/teams\/[^/]+\/members/.test(p),
+        method: 'GET'
+      })
+      .reply(opts => {
+        const slug = opts.path.match(/\/teams\/([^/]+)\/members/)?.[1] ?? ''
+        return {
+          statusCode: 200,
+          data: (membersByTeam[slug] ?? []).map(login => ({login})),
+          responseOptions: {headers: {'content-type': 'application/json'}}
+        }
+      })
+      .persist()
+  }
+
   test('labels PR when author matches teams.yml config', async () => {
     prEvent('Anakin')
     let postedLabels: unknown
-    server.use(
-      configHandler(yaml({Frontend: ['@Anakin', '@Yoda']})),
-      labelsHandler(42, body => {
-        postedLabels = body
-      })
-    )
+    const pool = mockAgent.get('https://api.github.com')
+    setupConfigHandler(pool, yaml({Frontend: ['@Anakin', '@Yoda']}))
+    setupLabelsHandler(pool, 42, body => {
+      postedLabels = body
+    })
 
     await runAction()
     await vi.waitFor(
@@ -164,7 +183,8 @@ describe('E2E: team-labeler-action', () => {
 
   test('no labels when author not in any team', async () => {
     prEvent('Anakin')
-    server.use(configHandler(yaml({Frontend: ['@Yoda', '@Obi-Wan']})))
+    const pool = mockAgent.get('https://api.github.com')
+    setupConfigHandler(pool, yaml({Frontend: ['@Yoda', '@Obi-Wan']}))
 
     await runAction()
     await vi.waitFor(
@@ -181,12 +201,11 @@ describe('E2E: team-labeler-action', () => {
   test('labels issue when issue author matches config', async () => {
     issueEvent('Anakin')
     let postedLabels: unknown
-    server.use(
-      configHandler(yaml({Backend: ['@Anakin']})),
-      labelsHandler(7, body => {
-        postedLabels = body
-      })
-    )
+    const pool = mockAgent.get('https://api.github.com')
+    setupConfigHandler(pool, yaml({Backend: ['@Anakin']}))
+    setupLabelsHandler(pool, 7, body => {
+      postedLabels = body
+    })
 
     await runAction()
     await vi.waitFor(
@@ -207,14 +226,13 @@ describe('E2E: team-labeler-action', () => {
     prEvent('Anakin')
     vi.stubEnv('INPUT_ORG-TOKEN', 'fake-org-token')
     let postedLabels: unknown
-    server.use(
-      configHandler(yaml({PlatformTeam: ['@test-owner/platform']})),
-      labelsHandler(42, body => {
-        postedLabels = body
-      }),
-      teamsHandler([{slug: 'platform', name: 'Platform'}]),
-      membersHandler({platform: ['Anakin']})
-    )
+    const pool = mockAgent.get('https://api.github.com')
+    setupConfigHandler(pool, yaml({PlatformTeam: ['@test-owner/platform']}))
+    setupLabelsHandler(pool, 42, body => {
+      postedLabels = body
+    })
+    setupTeamsHandler(pool, [{slug: 'platform', name: 'Platform'}])
+    setupMembersHandler(pool, {platform: ['Anakin']})
 
     await runAction()
     await vi.waitFor(
@@ -235,19 +253,19 @@ describe('E2E: team-labeler-action', () => {
     prEvent('Anakin')
     vi.stubEnv('INPUT_ORG-TOKEN', 'fake-org-token')
     let postedLabels: unknown
-    server.use(
-      configHandler(
-        yaml({
-          Frontend: ['@Anakin'],
-          PlatformTeam: ['@test-owner/platform']
-        })
-      ),
-      labelsHandler(42, body => {
-        postedLabels = body
-      }),
-      teamsHandler([{slug: 'platform', name: 'Platform'}]),
-      membersHandler({platform: ['Anakin']})
+    const pool = mockAgent.get('https://api.github.com')
+    setupConfigHandler(
+      pool,
+      yaml({
+        Frontend: ['@Anakin'],
+        PlatformTeam: ['@test-owner/platform']
+      })
     )
+    setupLabelsHandler(pool, 42, body => {
+      postedLabels = body
+    })
+    setupTeamsHandler(pool, [{slug: 'platform', name: 'Platform'}])
+    setupMembersHandler(pool, {platform: ['Anakin']})
 
     await runAction()
     await vi.waitFor(
@@ -282,12 +300,13 @@ describe('E2E: team-labeler-action', () => {
 
   test('handles API error gracefully', async () => {
     prEvent('Anakin')
-    server.use(
-      http.get(
-        'https://api.github.com/repos/test-owner/test-repo/contents/:path',
-        () => HttpResponse.json({message: 'Internal Server Error'}, {status: 500})
-      )
-    )
+    const pool = mockAgent.get('https://api.github.com')
+    pool
+      .intercept({
+        path: /^\/repos\/test-owner\/test-repo\/contents\/.+/,
+        method: 'GET'
+      })
+      .reply(500, {message: 'Internal Server Error'})
 
     await runAction()
     await vi.waitFor(
