@@ -1,52 +1,75 @@
-import * as os from 'os';
-import os__default, { EOL } from 'os';
-import * as crypto from 'crypto';
-import * as fs from 'fs';
-import fs__default, { promises, constants as constants$a } from 'fs';
-import * as path from 'path';
-import * as http from 'http';
-import http__default from 'http';
-import * as https from 'https';
-import https__default from 'https';
-import require$$0$8 from 'net';
-import require$$1 from 'tls';
-import * as events$2 from 'events';
-import events__default from 'events';
-import require$$0$7 from 'assert';
-import require$$0 from 'util';
-import require$$0$3 from 'node:assert';
-import require$$0$5 from 'node:net';
-import require$$2$1 from 'node:http';
-import require$$0$4 from 'node:stream';
-import require$$0$1 from 'node:buffer';
-import require$$1$1 from 'node:util';
-import require$$7 from 'node:querystring';
-import require$$0$2 from 'node:events';
-import require$$0$6 from 'node:diagnostics_channel';
-import require$$5 from 'node:tls';
-import require$$1$3 from 'node:zlib';
-import require$$5$1 from 'node:perf_hooks';
-import require$$8 from 'node:util/types';
-import require$$1$2 from 'node:worker_threads';
-import require$$1$4 from 'node:url';
-import require$$5$2 from 'node:async_hooks';
-import require$$1$5 from 'node:console';
-import require$$1$6 from 'node:dns';
-import require$$5$3, { StringDecoder } from 'string_decoder';
-import * as child from 'child_process';
-import { setTimeout as setTimeout$1 } from 'timers';
-import require$$0$9 from 'stream';
-import require$$7$1 from 'buffer';
-import require$$8$1 from 'querystring';
-import require$$14 from 'stream/web';
-import require$$0$a from 'worker_threads';
-import require$$2$2 from 'perf_hooks';
-import require$$5$4 from 'util/types';
-import require$$4$1 from 'async_hooks';
-import require$$1$7 from 'console';
-import require$$1$8 from 'url';
-import require$$3$1 from 'zlib';
-import require$$0$b from 'diagnostics_channel';
+'use strict';
+
+var os = require('os');
+var crypto = require('crypto');
+var fs = require('fs');
+var path = require('path');
+var http = require('http');
+var https = require('https');
+var require$$0$8 = require('net');
+var require$$1 = require('tls');
+var events$2 = require('events');
+var require$$0$7 = require('assert');
+var require$$0 = require('util');
+var require$$0$3 = require('node:assert');
+var require$$0$5 = require('node:net');
+var require$$2$1 = require('node:http');
+var require$$0$4 = require('node:stream');
+var require$$0$1 = require('node:buffer');
+var require$$1$1 = require('node:util');
+var require$$7 = require('node:querystring');
+var require$$0$2 = require('node:events');
+var require$$0$6 = require('node:diagnostics_channel');
+var require$$5 = require('node:tls');
+var require$$1$3 = require('node:zlib');
+var require$$5$1 = require('node:perf_hooks');
+var require$$8 = require('node:util/types');
+var require$$1$2 = require('node:worker_threads');
+var require$$1$4 = require('node:url');
+var require$$5$2 = require('node:async_hooks');
+var require$$1$5 = require('node:console');
+var require$$1$6 = require('node:dns');
+var require$$5$3 = require('string_decoder');
+var child = require('child_process');
+var timers$2 = require('timers');
+var require$$0$9 = require('stream');
+var require$$7$1 = require('buffer');
+var require$$8$1 = require('querystring');
+var require$$14 = require('stream/web');
+var require$$0$a = require('worker_threads');
+var require$$2$2 = require('perf_hooks');
+var require$$5$4 = require('util/types');
+var require$$4$1 = require('async_hooks');
+var require$$1$7 = require('console');
+var require$$1$8 = require('url');
+var require$$3$1 = require('zlib');
+var require$$0$b = require('diagnostics_channel');
+
+function _interopNamespaceDefault(e) {
+    var n = Object.create(null);
+    if (e) {
+        Object.keys(e).forEach(function (k) {
+            if (k !== 'default') {
+                var d = Object.getOwnPropertyDescriptor(e, k);
+                Object.defineProperty(n, k, d.get ? d : {
+                    enumerable: true,
+                    get: function () { return e[k]; }
+                });
+            }
+        });
+    }
+    n.default = e;
+    return Object.freeze(n);
+}
+
+var os__namespace = /*#__PURE__*/_interopNamespaceDefault(os);
+var crypto__namespace = /*#__PURE__*/_interopNamespaceDefault(crypto);
+var fs__namespace = /*#__PURE__*/_interopNamespaceDefault(fs);
+var path__namespace = /*#__PURE__*/_interopNamespaceDefault(path);
+var http__namespace = /*#__PURE__*/_interopNamespaceDefault(http);
+var https__namespace = /*#__PURE__*/_interopNamespaceDefault(https);
+var events__namespace = /*#__PURE__*/_interopNamespaceDefault(events$2);
+var child__namespace = /*#__PURE__*/_interopNamespaceDefault(child);
 
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -118,7 +141,7 @@ function toCommandProperties(annotationProperties) {
  */
 function issueCommand(command, properties, message) {
     const cmd = new Command(command, properties, message);
-    process.stdout.write(cmd.toString() + os.EOL);
+    process.stdout.write(cmd.toString() + os__namespace.EOL);
 }
 function issue(name, message = '') {
     issueCommand(name, {}, message);
@@ -180,15 +203,15 @@ function issueFileCommand(command, message) {
     if (!filePath) {
         throw new Error(`Unable to find environment variable for file command ${command}`);
     }
-    if (!fs.existsSync(filePath)) {
+    if (!fs__namespace.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
     }
-    fs.appendFileSync(filePath, `${toCommandValue(message)}${os.EOL}`, {
+    fs__namespace.appendFileSync(filePath, `${toCommandValue(message)}${os__namespace.EOL}`, {
         encoding: 'utf8'
     });
 }
 function prepareKeyValueMessage(key, value) {
-    const delimiter = `ghadelimiter_${crypto.randomUUID()}`;
+    const delimiter = `ghadelimiter_${crypto__namespace.randomUUID()}`;
     const convertedValue = toCommandValue(value);
     // These should realistically never happen, but just in case someone finds a
     // way to exploit uuid generation let's not allow keys or values that contain
@@ -199,7 +222,7 @@ function prepareKeyValueMessage(key, value) {
     if (convertedValue.includes(delimiter)) {
         throw new Error(`Unexpected input: value should not contain the delimiter "${delimiter}"`);
     }
-    return `${key}<<${delimiter}${os.EOL}${convertedValue}${os.EOL}${delimiter}`;
+    return `${key}<<${delimiter}${os__namespace.EOL}${convertedValue}${os__namespace.EOL}${delimiter}`;
 }
 
 function getProxyUrl(reqUrl) {
@@ -335,9 +358,9 @@ function requireTunnel$1 () {
 	if (hasRequiredTunnel$1) return tunnel$1;
 	hasRequiredTunnel$1 = 1;
 	var tls = require$$1;
-	var http = http__default;
-	var https = https__default;
-	var events = events__default;
+	var http$1 = http;
+	var https$1 = https;
+	var events = events$2;
 	var util = require$$0;
 
 
@@ -349,13 +372,13 @@ function requireTunnel$1 () {
 
 	function httpOverHttp(options) {
 	  var agent = new TunnelingAgent(options);
-	  agent.request = http.request;
+	  agent.request = http$1.request;
 	  return agent;
 	}
 
 	function httpsOverHttp(options) {
 	  var agent = new TunnelingAgent(options);
-	  agent.request = http.request;
+	  agent.request = http$1.request;
 	  agent.createSocket = createSecureSocket;
 	  agent.defaultPort = 443;
 	  return agent;
@@ -363,13 +386,13 @@ function requireTunnel$1 () {
 
 	function httpOverHttps(options) {
 	  var agent = new TunnelingAgent(options);
-	  agent.request = https.request;
+	  agent.request = https$1.request;
 	  return agent;
 	}
 
 	function httpsOverHttps(options) {
 	  var agent = new TunnelingAgent(options);
-	  agent.request = https.request;
+	  agent.request = https$1.request;
 	  agent.createSocket = createSecureSocket;
 	  agent.defaultPort = 443;
 	  return agent;
@@ -380,7 +403,7 @@ function requireTunnel$1 () {
 	  var self = this;
 	  self.options = options || {};
 	  self.proxyOptions = self.options.proxy || {};
-	  self.maxSockets = self.options.maxSockets || http.Agent.defaultMaxSockets;
+	  self.maxSockets = self.options.maxSockets || http$1.Agent.defaultMaxSockets;
 	  self.requests = [];
 	  self.sockets = [];
 
@@ -28335,7 +28358,7 @@ class HttpClient {
         const info = {};
         info.parsedUrl = requestUrl;
         const usingSsl = info.parsedUrl.protocol === 'https:';
-        info.httpModule = usingSsl ? https : http;
+        info.httpModule = usingSsl ? https__namespace : http__namespace;
         const defaultPort = usingSsl ? 443 : 80;
         info.options = {};
         info.options.host = info.parsedUrl.hostname;
@@ -28449,7 +28472,7 @@ class HttpClient {
         const usingSsl = parsedUrl.protocol === 'https:';
         let maxSockets = 100;
         if (this.requestOptions) {
-            maxSockets = this.requestOptions.maxSockets || http.globalAgent.maxSockets;
+            maxSockets = this.requestOptions.maxSockets || http__namespace.globalAgent.maxSockets;
         }
         // This is `useProxy` again, but we need to check `proxyURl` directly for TypeScripts's flow analysis.
         if (proxyUrl && proxyUrl.hostname) {
@@ -28474,7 +28497,7 @@ class HttpClient {
         // if tunneling agent isn't assigned create a new agent
         if (!agent) {
             const options = { keepAlive: this._keepAlive, maxSockets };
-            agent = usingSsl ? new https.Agent(options) : new http.Agent(options);
+            agent = usingSsl ? new https__namespace.Agent(options) : new http__namespace.Agent(options);
             this._agent = agent;
         }
         if (usingSsl && this._ignoreSslError) {
@@ -28708,7 +28731,7 @@ var __awaiter$6 = (undefined && undefined.__awaiter) || function (thisArg, _argu
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const { access, appendFile, writeFile } = promises;
+const { access, appendFile, writeFile } = fs.promises;
 const SUMMARY_ENV_VAR = 'GITHUB_STEP_SUMMARY';
 class Summary {
     constructor() {
@@ -28730,7 +28753,7 @@ class Summary {
                 throw new Error(`Unable to find environment variable for $${SUMMARY_ENV_VAR}. Check if your runtime environment supports job summaries.`);
             }
             try {
-                yield access(pathFromEnv, constants$a.R_OK | constants$a.W_OK);
+                yield access(pathFromEnv, fs.constants.R_OK | fs.constants.W_OK);
             }
             catch (_a) {
                 throw new Error(`Unable to access summary file: '${pathFromEnv}'. Check if the file has correct read/write permissions.`);
@@ -28826,7 +28849,7 @@ class Summary {
      * @returns {Summary} summary instance
      */
     addEOL() {
-        return this.addRaw(EOL);
+        return this.addRaw(os.EOL);
     }
     /**
      * Adds an HTML codeblock to the summary buffer
@@ -29005,7 +29028,7 @@ function toWin32Path(pth) {
  * @return string The platform-specific path.
  */
 function toPlatformPath(pth) {
-    return pth.replace(/[/\\]/g, path.sep);
+    return pth.replace(/[/\\]/g, path__namespace.sep);
 }
 
 var __awaiter$5 = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -29017,10 +29040,10 @@ var __awaiter$5 = (undefined && undefined.__awaiter) || function (thisArg, _argu
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const { chmod, copyFile, lstat, mkdir, open, readdir, rename, rm, rmdir, stat, symlink, unlink } = fs.promises;
+const { chmod, copyFile, lstat, mkdir, open, readdir, rename, rm, rmdir, stat, symlink, unlink } = fs__namespace.promises;
 // export const {open} = 'fs'
 const IS_WINDOWS$1 = process.platform === 'win32';
-fs.constants.O_RDONLY;
+fs__namespace.constants.O_RDONLY;
 function exists(fsPath) {
     return __awaiter$5(this, void 0, void 0, function* () {
         try {
@@ -29072,7 +29095,7 @@ function tryGetExecutablePath(filePath, extensions) {
         if (stats && stats.isFile()) {
             if (IS_WINDOWS$1) {
                 // on Windows, test for valid extension
-                const upperExt = path.extname(filePath).toUpperCase();
+                const upperExt = path__namespace.extname(filePath).toUpperCase();
                 if (extensions.some(validExt => validExt.toUpperCase() === upperExt)) {
                     return filePath;
                 }
@@ -29101,11 +29124,11 @@ function tryGetExecutablePath(filePath, extensions) {
                 if (IS_WINDOWS$1) {
                     // preserve the case of the actual file (since an extension was appended)
                     try {
-                        const directory = path.dirname(filePath);
-                        const upperName = path.basename(filePath).toUpperCase();
+                        const directory = path__namespace.dirname(filePath);
+                        const upperName = path__namespace.basename(filePath).toUpperCase();
                         for (const actualName of yield readdir(directory)) {
                             if (upperName === actualName.toUpperCase()) {
-                                filePath = path.join(directory, actualName);
+                                filePath = path__namespace.join(directory, actualName);
                                 break;
                             }
                         }
@@ -29205,7 +29228,7 @@ function findInPath(tool) {
         // build the list of extensions to try
         const extensions = [];
         if (IS_WINDOWS$1 && process.env['PATHEXT']) {
-            for (const extension of process.env['PATHEXT'].split(path.delimiter)) {
+            for (const extension of process.env['PATHEXT'].split(path__namespace.delimiter)) {
                 if (extension) {
                     extensions.push(extension);
                 }
@@ -29220,7 +29243,7 @@ function findInPath(tool) {
             return [];
         }
         // if any path separators, return empty
-        if (tool.includes(path.sep)) {
+        if (tool.includes(path__namespace.sep)) {
             return [];
         }
         // build the list of directories
@@ -29231,7 +29254,7 @@ function findInPath(tool) {
         // across platforms.
         const directories = [];
         if (process.env.PATH) {
-            for (const p of process.env.PATH.split(path.delimiter)) {
+            for (const p of process.env.PATH.split(path__namespace.delimiter)) {
                 if (p) {
                     directories.push(p);
                 }
@@ -29240,7 +29263,7 @@ function findInPath(tool) {
         // find all matches
         const matches = [];
         for (const directory of directories) {
-            const filePath = yield tryGetExecutablePath(path.join(directory, tool), extensions);
+            const filePath = yield tryGetExecutablePath(path__namespace.join(directory, tool), extensions);
             if (filePath) {
                 matches.push(filePath);
             }
@@ -29263,7 +29286,7 @@ const IS_WINDOWS = process.platform === 'win32';
 /*
  * Class for running command line tools. Handles quoting and arg parsing in a platform agnostic way.
  */
-class ToolRunner extends events$2.EventEmitter {
+class ToolRunner extends events__namespace.EventEmitter {
     constructor(toolPath, args, options) {
         super();
         if (!toolPath) {
@@ -29319,13 +29342,13 @@ class ToolRunner extends events$2.EventEmitter {
     _processLineBuffer(data, strBuffer, onLine) {
         try {
             let s = strBuffer + data.toString();
-            let n = s.indexOf(os.EOL);
+            let n = s.indexOf(os__namespace.EOL);
             while (n > -1) {
                 const line = s.substring(0, n);
                 onLine(line);
                 // the rest of the string ...
-                s = s.substring(n + os.EOL.length);
-                n = s.indexOf(os.EOL);
+                s = s.substring(n + os__namespace.EOL.length);
+                n = s.indexOf(os__namespace.EOL);
             }
             return s;
         }
@@ -29603,7 +29626,7 @@ class ToolRunner extends events$2.EventEmitter {
                 (this.toolPath.includes('/') ||
                     (IS_WINDOWS && this.toolPath.includes('\\')))) {
                 // prefer options.cwd if it is specified, however options.cwd may also need to be rooted
-                this.toolPath = path.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
+                this.toolPath = path__namespace.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
             }
             // if the tool is only a file name, then resolve it from the PATH
             // otherwise verify it exists (add extension on Windows if necessary)
@@ -29616,7 +29639,7 @@ class ToolRunner extends events$2.EventEmitter {
                 }
                 const optionsNonNull = this._cloneExecOptions(this.options);
                 if (!optionsNonNull.silent && optionsNonNull.outStream) {
-                    optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os.EOL);
+                    optionsNonNull.outStream.write(this._getCommandString(optionsNonNull) + os__namespace.EOL);
                 }
                 const state = new ExecState(optionsNonNull, this.toolPath);
                 state.on('debug', (message) => {
@@ -29626,7 +29649,7 @@ class ToolRunner extends events$2.EventEmitter {
                     return reject(new Error(`The cwd: ${this.options.cwd} does not exist!`));
                 }
                 const fileName = this._getSpawnFileName();
-                const cp = child.spawn(fileName, this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(this.options, fileName));
+                const cp = child__namespace.spawn(fileName, this._getSpawnArgs(optionsNonNull), this._getSpawnOptions(this.options, fileName));
                 let stdbuffer = '';
                 if (cp.stdout) {
                     cp.stdout.on('data', (data) => {
@@ -29761,7 +29784,7 @@ function argStringToArray(argString) {
     }
     return args;
 }
-class ExecState extends events$2.EventEmitter {
+class ExecState extends events__namespace.EventEmitter {
     constructor(options, toolPath) {
         super();
         this.processClosed = false; // tracks whether the process has exited and stdio is closed
@@ -29789,7 +29812,7 @@ class ExecState extends events$2.EventEmitter {
             this._setResult();
         }
         else if (this.processExited) {
-            this.timeout = setTimeout$1(ExecState.HandleTimeout, this.delay, this);
+            this.timeout = timers$2.setTimeout(ExecState.HandleTimeout, this.delay, this);
         }
     }
     _debug(message) {
@@ -29877,8 +29900,8 @@ function getExecOutput(commandLine, args, options) {
         let stdout = '';
         let stderr = '';
         //Using string decoder covers the case where a mult-byte character is split
-        const stdoutDecoder = new StringDecoder('utf8');
-        const stderrDecoder = new StringDecoder('utf8');
+        const stdoutDecoder = new require$$5$3.StringDecoder('utf8');
+        const stderrDecoder = new require$$5$3.StringDecoder('utf8');
         const originalStdoutListener = (_a = options === null || options === void 0 ? void 0 : options.listeners) === null || _a === void 0 ? void 0 : _a.stdout;
         const originalStdErrListener = (_b = options === null || options === void 0 ? void 0 : options.listeners) === null || _b === void 0 ? void 0 : _b.stderr;
         const stdErrListener = (data) => {
@@ -29949,8 +29972,8 @@ const getLinuxInfo = () => __awaiter$1(void 0, void 0, void 0, function* () {
         version
     };
 });
-const platform = os__default.platform();
-const arch = os__default.arch();
+const platform = os.platform();
+const arch = os.arch();
 const isWindows = platform === 'win32';
 const isMacOS = platform === 'darwin';
 const isLinux = platform === 'linux';
@@ -30063,7 +30086,7 @@ function addPath(inputPath) {
     else {
         issueCommand('add-path', {}, inputPath);
     }
-    process.env['PATH'] = `${inputPath}${path.delimiter}${process.env['PATH']}`;
+    process.env['PATH'] = `${inputPath}${path__namespace.delimiter}${process.env['PATH']}`;
 }
 /**
  * Gets the value of an input.
@@ -30134,7 +30157,7 @@ function setOutput(name, value) {
     if (filePath) {
         return issueFileCommand('OUTPUT', prepareKeyValueMessage(name, value));
     }
-    process.stdout.write(os.EOL);
+    process.stdout.write(os__namespace.EOL);
     issueCommand('set-output', { name }, toCommandValue(value));
 }
 /**
@@ -30202,7 +30225,7 @@ function notice(message, properties = {}) {
  * @param message info message
  */
 function info(message) {
-    process.stdout.write(message + os.EOL);
+    process.stdout.write(message + os__namespace.EOL);
 }
 /**
  * Begin an output group.
@@ -30325,8 +30348,8 @@ function requireContext () {
 	hasRequiredContext = 1;
 	Object.defineProperty(context, "__esModule", { value: true });
 	context.Context = void 0;
-	const fs_1 = fs__default;
-	const os_1 = os__default;
+	const fs_1 = fs;
+	const os_1 = os;
 	class Context {
 	    /**
 	     * Hydrate the context from the environment
@@ -30938,7 +30961,7 @@ function requireUtil$6 () {
 
 	const assert = require$$0$7;
 	const { kDestroyed, kBodyUsed } = requireSymbols$4();
-	const { IncomingMessage } = http__default;
+	const { IncomingMessage } = http;
 	const stream = require$$0$9;
 	const net = require$$0$8;
 	const { InvalidArgumentError } = requireErrors();
@@ -37617,7 +37640,7 @@ function requireDispatcher () {
 	if (hasRequiredDispatcher) return dispatcher;
 	hasRequiredDispatcher = 1;
 
-	const EventEmitter = events__default;
+	const EventEmitter = events$2;
 
 	class Dispatcher extends EventEmitter {
 	  dispatch () {
@@ -38352,7 +38375,7 @@ function requireRedirectHandler () {
 	const { kBodyUsed } = requireSymbols$4();
 	const assert = require$$0$7;
 	const { InvalidArgumentError } = requireErrors();
-	const EE = events__default;
+	const EE = events$2;
 
 	const redirectableStatusCodes = [300, 301, 302, 303, 307, 308];
 
@@ -38612,7 +38635,7 @@ function requireClient () {
 
 	const assert = require$$0$7;
 	const net = require$$0$8;
-	const http = http__default;
+	const http$1 = http;
 	const { pipeline } = require$$0$9;
 	const util = requireUtil$6();
 	const timers = requireTimers();
@@ -38877,7 +38900,7 @@ function requireClient () {
 	    this[kConnector] = connect;
 	    this[kSocket] = null;
 	    this[kPipelining] = pipelining != null ? pipelining : 1;
-	    this[kMaxHeadersSize] = maxHeaderSize || http.maxHeaderSize;
+	    this[kMaxHeadersSize] = maxHeaderSize || http$1.maxHeaderSize;
 	    this[kKeepAliveDefaultTimeout] = keepAliveTimeout == null ? 4e3 : keepAliveTimeout;
 	    this[kKeepAliveMaxTimeout] = keepAliveMaxTimeout == null ? 600e3 : keepAliveMaxTimeout;
 	    this[kKeepAliveTimeoutThreshold] = keepAliveTimeoutThreshold == null ? 1e3 : keepAliveTimeoutThreshold;
@@ -43217,7 +43240,7 @@ function requireMockUtils () {
 	  kGetNetConnect
 	} = requireMockSymbols();
 	const { buildURL, nop } = requireUtil$6();
-	const { STATUS_CODES } = http__default;
+	const { STATUS_CODES } = http;
 	const {
 	  types: {
 	    isPromise
@@ -46006,7 +46029,7 @@ function requireRequest () {
 	const { URLSerializer } = requireDataURL();
 	const { kHeadersList, kConstruct } = requireSymbols$4();
 	const assert = require$$0$7;
-	const { getMaxListeners, setMaxListeners, getEventListeners, defaultMaxListeners } = events__default;
+	const { getMaxListeners, setMaxListeners, getEventListeners, defaultMaxListeners } = events$2;
 
 	let TransformStream = globalThis.TransformStream;
 
@@ -46982,14 +47005,14 @@ function requireFetch () {
 	  DOMException
 	} = requireConstants$3();
 	const { kHeadersList } = requireSymbols$4();
-	const EE = events__default;
+	const EE = events$2;
 	const { Readable, pipeline } = require$$0$9;
 	const { addAbortListener, isErrored, isReadable, nodeMajor, nodeMinor } = requireUtil$6();
 	const { dataURLProcessor, serializeAMimeType } = requireDataURL();
 	const { TransformStream } = require$$14;
 	const { getGlobalDispatcher } = requireGlobal();
 	const { webidl } = requireWebidl();
-	const { STATUS_CODES } = http__default;
+	const { STATUS_CODES } = http;
 	const GET_OR_HEAD = ['GET', 'HEAD'];
 
 	/** @type {import('buffer').resolveObjectURL} */
@@ -54233,8 +54256,8 @@ function requireLib () {
 	};
 	Object.defineProperty(lib, "__esModule", { value: true });
 	lib.HttpClient = lib.isHttps = lib.HttpClientResponse = lib.HttpClientError = lib.getProxyUrl = lib.MediaTypes = lib.Headers = lib.HttpCodes = void 0;
-	const http = __importStar(http__default);
-	const https = __importStar(https__default);
+	const http$1 = __importStar(http);
+	const https$1 = __importStar(https);
 	const pm = __importStar(requireProxy());
 	const tunnel = __importStar(requireTunnel());
 	const undici_1 = requireUndici();
@@ -54658,7 +54681,7 @@ function requireLib () {
 	        const info = {};
 	        info.parsedUrl = requestUrl;
 	        const usingSsl = info.parsedUrl.protocol === 'https:';
-	        info.httpModule = usingSsl ? https : http;
+	        info.httpModule = usingSsl ? https$1 : http$1;
 	        const defaultPort = usingSsl ? 443 : 80;
 	        info.options = {};
 	        info.options.host = info.parsedUrl.hostname;
@@ -54711,7 +54734,7 @@ function requireLib () {
 	        const usingSsl = parsedUrl.protocol === 'https:';
 	        let maxSockets = 100;
 	        if (this.requestOptions) {
-	            maxSockets = this.requestOptions.maxSockets || http.globalAgent.maxSockets;
+	            maxSockets = this.requestOptions.maxSockets || http$1.globalAgent.maxSockets;
 	        }
 	        // This is `useProxy` again, but we need to check `proxyURl` directly for TypeScripts's flow analysis.
 	        if (proxyUrl && proxyUrl.hostname) {
@@ -54736,7 +54759,7 @@ function requireLib () {
 	        // if tunneling agent isn't assigned create a new agent
 	        if (!agent) {
 	            const options = { keepAlive: this._keepAlive, maxSockets };
-	            agent = usingSsl ? new https.Agent(options) : new http.Agent(options);
+	            agent = usingSsl ? new https$1.Agent(options) : new http$1.Agent(options);
 	            this._agent = agent;
 	        }
 	        if (usingSsl && this._ignoreSslError) {
