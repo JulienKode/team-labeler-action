@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import {getTeamLabel} from './teams'
+import {getTeamLabel} from './teams.js'
 import {
   getPrNumber,
   getPrAuthor,
@@ -7,7 +7,7 @@ import {
   addLabels,
   createClient,
   getUserTeams
-} from './github'
+} from './github.js'
 
 async function run() {
   try {
