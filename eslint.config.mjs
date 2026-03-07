@@ -25,7 +25,7 @@ export default [
       },
       globals: {
         ...globals.node,
-        ...globals.jest
+        ...globals.es2020
       }
     },
     rules: {

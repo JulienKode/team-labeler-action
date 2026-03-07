@@ -1,10 +1,7 @@
 name: "build"
 on:
-  pull_request:
   push:
-    branches:
-      - master
-      - 'releases/*'
+
 permissions:
   contents: read
 
@@ -13,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v6
+    - uses: pnpm/action-setup@v4
     - run: |
-        yarn
-        yarn all
+        pnpm install
+        pnpm all
