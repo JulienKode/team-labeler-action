@@ -1,0 +1,19 @@
+name: "e2e"
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - 'releases/*'
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - uses: pnpm/action-setup@v4
+    - run: |
+        pnpm install
+        pnpm test:e2e
