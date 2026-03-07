@@ -106,7 +106,7 @@ describe('E2E: team-labeler-action', () => {
   function setupLabelsHandler(
     pool: ReturnType<MockAgent['get']>,
     issueNumber: number,
-    capture?: (body: unknown) => void
+    capture?: (body: {labels: string[]}) => void
   ) {
     pool
       .intercept({
@@ -159,7 +159,7 @@ describe('E2E: team-labeler-action', () => {
 
   test('labels PR when author matches teams.yml config', async () => {
     prEvent('Anakin')
-    let postedLabels: unknown
+    let postedLabels: {labels: string[]} | undefined
     const pool = mockAgent.get('https://api.github.com')
     setupConfigHandler(pool, yaml({Frontend: ['@Anakin', '@Yoda']}))
     setupLabelsHandler(pool, 42, body => {
@@ -200,7 +200,7 @@ describe('E2E: team-labeler-action', () => {
 
   test('labels issue when issue author matches config', async () => {
     issueEvent('Anakin')
-    let postedLabels: unknown
+    let postedLabels: {labels: string[]} | undefined
     const pool = mockAgent.get('https://api.github.com')
     setupConfigHandler(pool, yaml({Backend: ['@Anakin']}))
     setupLabelsHandler(pool, 7, body => {
@@ -225,7 +225,7 @@ describe('E2E: team-labeler-action', () => {
   test('labels from org team membership using org-token', async () => {
     prEvent('Anakin')
     vi.stubEnv('INPUT_ORG-TOKEN', 'fake-org-token')
-    let postedLabels: unknown
+    let postedLabels: {labels: string[]} | undefined
     const pool = mockAgent.get('https://api.github.com')
     setupConfigHandler(pool, yaml({PlatformTeam: ['@test-owner/platform']}))
     setupLabelsHandler(pool, 42, body => {
@@ -252,7 +252,7 @@ describe('E2E: team-labeler-action', () => {
   test('multiple labels from direct user match and org team', async () => {
     prEvent('Anakin')
     vi.stubEnv('INPUT_ORG-TOKEN', 'fake-org-token')
-    let postedLabels: unknown
+    let postedLabels: {labels: string[]} | undefined
     const pool = mockAgent.get('https://api.github.com')
     setupConfigHandler(
       pool,
@@ -275,10 +275,9 @@ describe('E2E: team-labeler-action', () => {
       {timeout: 5000}
     )
 
-    const labels = (postedLabels as {labels: string[]}).labels
-    expect(labels).toHaveLength(2)
-    expect(labels).toContain('Frontend')
-    expect(labels).toContain('PlatformTeam')
+    expect(postedLabels?.labels).toHaveLength(2)
+    expect(postedLabels?.labels).toContain('Frontend')
+    expect(postedLabels?.labels).toContain('PlatformTeam')
     expect(stdout()).not.toContain('::error::')
   })
 
