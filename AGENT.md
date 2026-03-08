@@ -11,21 +11,21 @@ This is a GitHub Action that automatically labels pull requests and issues based
 ### Standard Development Cycle
 ```bash
 # After making changes to src/
-yarn build        # Compile TS → JS (lib/)
-yarn test         # Verify tests pass
-yarn package      # Bundle with ncc (dist/)
+pnpm build        # Compile TS → JS (lib/)
+pnpm test         # Verify tests pass
+pnpm package      # Bundle with rollup (dist/)
 ```
 
 ### Quick Development
 ```bash
-yarn all          # Build + format + lint + package + test
+pnpm all          # Build + format + lint + package + test
 ```
 
 ### Testing Specific Scenarios
 ```bash
-jest __tests__/github.test.ts                    # Single file
-jest -t "should return only the teams"           # Specific test
-jest --watch                                      # Watch mode
+pnpm test -- __tests__/github.test.ts               # Single file
+pnpm test -- -t "should return only the teams"       # Specific test
+pnpm test:e2e                                         # End-to-end tests
 ```
 
 ## Code Patterns and Conventions
@@ -78,9 +78,11 @@ for (const team of teams) {
 
 ### Case-Insensitive Matching Pattern
 ```typescript
-// Always use toLowerCase() for username/team comparisons
+// teams.ts uses toLowerCase() for username/team comparisons
 authors.some(a => a.toLowerCase() === author.toLowerCase())
 ```
+
+**Note**: `src/github.ts` currently uses case-sensitive matching (`===`) when checking org team membership, while `src/teams.ts` correctly uses case-insensitive matching. This inconsistency should be kept in mind when working on team matching logic.
 
 ## File Structure and Responsibilities
 
@@ -110,17 +112,27 @@ authors.some(a => a.toLowerCase() === author.toLowerCase())
 - **Purpose**: Shared TypeScript types
 - **Current Types**: `ExternalRepo` for cross-repo configuration
 
+### Configuration Files
+- `rollup.config.ts`: Bundler config (TypeScript → CommonJS bundle)
+- `vitest.config.ts`: Unit test configuration
+- `vitest.config.e2e.ts`: E2E test configuration
+- `eslint.config.mjs`: ESLint flat config with TypeScript rules
+- `.prettierrc.json`: Prettier formatting (no semi, single quotes, no trailing commas)
+
 ## Testing Patterns
+
+### Test Framework
+Tests use **vitest** (not jest). The API is largely compatible but uses `vi` instead of `jest` for mocking.
 
 ### Mock Structure
 ```typescript
 // Standard mock pattern for GitHub client
 const createMockClient = () => ({
-  paginate: jest.fn(),
+  paginate: vi.fn(),
   rest: {
     teams: {
-      list: jest.fn(),
-      listMembersInOrg: jest.fn()
+      list: vi.fn(),
+      listMembersInOrg: vi.fn()
     }
   }
 })
@@ -146,6 +158,9 @@ const setupPaginateMock = (mockClient, teamsResponse, membershipMap) => {
 - Test pagination scenarios (100+ items)
 - Test error handling with and without logger
 - Test edge cases: no teams, no membership, API failures
+
+### E2E Tests
+Located in `__tests__/e2e/e2e.test.ts`. These tests use `undici` MockAgent to mock HTTP requests and test the full action flow including PR events, issue events, org team integration, and error handling.
 
 ### Critical Test Coverage Areas
 1. Pagination with 100+ teams and members
@@ -191,12 +206,12 @@ const setupPaginateMock = (mockClient, teamsResponse, membershipMap) => {
 ## Build and Distribution
 
 ### Build Process
-1. TypeScript (`src/`) → JavaScript (`lib/`) via `tsc`
-2. JavaScript (`lib/`) → Bundled (`dist/index.js`) via `@vercel/ncc`
+1. TypeScript (`src/`) → JavaScript (`lib/`) via `tsc` (ES2022 target)
+2. JavaScript (`lib/`) → Bundled (`dist/index.js`) via `rollup` (CommonJS output)
 3. `dist/index.js` is what GitHub Actions executes
 
 ### Pre-Release Checklist
-- [ ] Run `yarn all` successfully
+- [ ] Run `pnpm all` successfully
 - [ ] Verify `dist/index.js` is updated
 - [ ] Test with sample repository
 - [ ] Update version in `package.json`
@@ -210,9 +225,11 @@ const setupPaginateMock = (mockClient, teamsResponse, membershipMap) => {
 - `js-yaml`: Parse team configuration YAML
 
 ### Key Dev Dependencies
-- `@vercel/ncc`: Bundle for distribution
-- `jest` + `ts-jest`: Testing framework
+- `rollup` + plugins: Bundle for distribution
+- `vitest`: Testing framework
+- `undici`: HTTP mocking for E2E tests
 - `@typescript-eslint/*`: TypeScript linting
+- `prettier`: Code formatting
 
 ## Permissions Model
 
@@ -238,12 +255,13 @@ Requires Personal Access Token (classic or fine-grained) with:
 
 ## TypeScript Configuration Notes
 
-- Target: ES6
-- Module: CommonJS (required for GitHub Actions)
+- Target: ES2022
+- Module: ES2022 (rollup converts to CommonJS for GitHub Actions)
+- Module Resolution: bundler
 - Output: `lib/` directory
 - Root: `src/` directory
-- `noImplicitAny: false` (allows some flexibility)
-- Excludes: `node_modules`, `**/*.test.ts`
+- `strict: true` (full strict mode enabled)
+- Excludes: `node_modules`, `__tests__`, `vitest.config*.ts`, `rollup.config.ts`
 
 ## GitHub Context Usage
 
