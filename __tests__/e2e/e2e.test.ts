@@ -91,16 +91,23 @@ describe('E2E: team-labeler-action', () => {
     github.context.payload = {issue: {number, user: {login: user}}}
   }
 
-  function setupConfigHandler(pool: ReturnType<MockAgent['get']>, yamlContent: string) {
+  function setupConfigHandler(
+    pool: ReturnType<MockAgent['get']>,
+    yamlContent: string
+  ) {
     pool
       .intercept({
         path: /^\/repos\/test-owner\/test-repo\/contents\/.+/,
         method: 'GET'
       })
-      .reply(200, {
-        content: Buffer.from(yamlContent).toString('base64'),
-        encoding: 'base64'
-      }, {headers: {'content-type': 'application/json'}})
+      .reply(
+        200,
+        {
+          content: Buffer.from(yamlContent).toString('base64'),
+          encoding: 'base64'
+        },
+        {headers: {'content-type': 'application/json'}}
+      )
   }
 
   function setupLabelsHandler(
@@ -143,7 +150,8 @@ describe('E2E: team-labeler-action', () => {
   ) {
     pool
       .intercept({
-        path: (p: string) => /^\/orgs\/test-owner\/teams\/[^/]+\/members/.test(p),
+        path: (p: string) =>
+          /^\/orgs\/test-owner\/teams\/[^/]+\/members/.test(p),
         method: 'GET'
       })
       .reply(opts => {
@@ -216,9 +224,7 @@ describe('E2E: team-labeler-action', () => {
     )
 
     expect(postedLabels).toEqual({labels: ['Backend']})
-    expect(JSON.parse(parseOutput(outputPath).team_labels)).toEqual([
-      'Backend'
-    ])
+    expect(JSON.parse(parseOutput(outputPath).team_labels)).toEqual(['Backend'])
     expect(stdout()).not.toContain('::error::')
   })
 
