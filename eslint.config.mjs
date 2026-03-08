@@ -42,13 +42,9 @@ export default [
 
       // Core TypeScript rules
       '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-var-requires': 'error',
+      '@typescript-eslint/no-require-imports': 'error',
       '@typescript-eslint/await-thenable': 'error',
-      '@typescript-eslint/no-empty-interface': 'error',
-
-      // Style rules
-      camelcase: 'off', // Disable base rule
-      semi: 'off' // Disable base rule
+      '@typescript-eslint/no-empty-object-type': 'error'
     }
   }
 ]
