@@ -68,8 +68,8 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
       undici:
-        specifier: 6.24.0
-        version: 6.24.0
+        specifier: 8.2.0
+        version: 8.2.0
       vitest:
         specifier: 4.1.5
         version: 4.1.5(@types/node@25.6.2)(msw@2.12.10(@types/node@25.6.2)(typescript@5.9.3))(vite@6.4.1(@types/node@25.6.2))
@@ -1246,6 +1246,10 @@ packages:
   undici@6.24.0:
     resolution: {integrity: sha512-lVLNosgqo5EkGqh5XUDhGfsMSoO8K0BAN0TyJLvwNRSl4xWGZlCVYsAIpa/OpA3TvmnM01GWcoKmc3ZWo5wKKA==}
     engines: {node: '>=18.17'}
+
+  undici@8.2.0:
+    resolution: {integrity: sha512-Z+4Hx9GE26Lh9Upwfnc8C7SsrpBPGaM/Gm6kMFtiG7c+5IvQKlXi/t+9x9DrrCh29cww5TSP9YdVaBcnLDs5fQ==}
+    engines: {node: '>=22.19.0'}
 
   universal-user-agent@7.0.3:
     resolution: {integrity: sha512-TmnEAEAsBJVZM/AADELsK76llnwcf9vMKuPz8JflO1frO8Lchitr0fNaN9d+Ap0BjKtqWqd/J17qeDnXh8CL2A==}
@@ -2495,6 +2499,8 @@ snapshots:
   undici-types@7.19.2: {}
 
   undici@6.24.0: {}
+
+  undici@8.2.0: {}
 
   universal-user-agent@7.0.3: {}
 
