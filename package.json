@@ -56,7 +56,7 @@
     "@types/js-yaml": "4.0.9",
     "@types/node": "25.6.2",
     "@typescript-eslint/eslint-plugin": "8.59.2",
-    "@typescript-eslint/parser": "8.59.2",
+    "@typescript-eslint/parser": "8.60.0",
     "eslint": "10.4.1",
     "globals": "17.6.0",
     "js-yaml": "4.1.1",
