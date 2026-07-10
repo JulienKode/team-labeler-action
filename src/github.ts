@@ -49,6 +49,10 @@ export async function getLabelsConfiguration(
     configurationPath,
     externalRepo
   )
+  // js-yaml 5 throws on empty sources, keep treating them as an empty config
+  if (!configurationContent.trim()) {
+    return new Map()
+  }
   const configObject: LabelConfiguration = yaml.load(
     configurationContent
   ) as LabelConfiguration
