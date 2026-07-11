@@ -206,6 +206,23 @@ describe('E2E: team-labeler-action', () => {
     expect(stdout()).not.toContain('::error::')
   })
 
+  test('no labels when teams config is empty', async () => {
+    prEvent('Anakin')
+    const pool = mockAgent.get('https://api.github.com')
+    setupConfigHandler(pool, '\n')
+
+    await runAction()
+    await vi.waitFor(
+      () => {
+        expect(fs.readFileSync(outputPath, 'utf-8')).toContain('team_labels')
+      },
+      {timeout: 5000}
+    )
+
+    expect(JSON.parse(parseOutput(outputPath).team_labels)).toEqual([])
+    expect(stdout()).not.toContain('::error::')
+  })
+
   test('labels issue when issue author matches config', async () => {
     issueEvent('Anakin')
     let postedLabels: {labels: string[]} | undefined
