@@ -10,7 +10,7 @@ overrides:
   '@octokit/graphql>@octokit/types': 13.6.1
   '@octokit/endpoint>@octokit/types': 13.6.1
   '@octokit/request-error>@octokit/types': 13.6.1
-  undici: 8.9.0
+  undici: 8.10.0
 
 importers:
 
@@ -66,8 +66,8 @@ importers:
         specifier: 6.0.3
         version: 6.0.3
       undici:
-        specifier: 8.9.0
-        version: 8.9.0
+        specifier: 8.10.0
+        version: 8.10.0
       vitest:
         specifier: 4.1.10
         version: 4.1.10(@types/node@26.1.2)(msw@2.12.10(@types/node@26.1.2)(typescript@6.0.3))(vite@6.4.1(@types/node@26.1.2))
@@ -1239,8 +1239,8 @@ packages:
   undici-types@8.3.0:
     resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
 
-  undici@8.9.0:
-    resolution: {integrity: sha512-aWZpUj7XoGonMClx4gdDRfgBjqeA+F473aDmROQQbM9n6PRfK/u1q/a0X4wMTgcHfT8H6fpbt98PFuDUwFg2YA==}
+  undici@8.10.0:
+    resolution: {integrity: sha512-HvltHd7avK13QIw/oLe4qoOLyoVSoafqJ2jYOrtMRBkbYT31eiBQ8O0ehRKZiEZCMEyLFQNIADpgCWC5fALvYQ==}
     engines: {node: '>=22.19.0'}
 
   universal-user-agent@7.0.3:
@@ -1394,17 +1394,17 @@ snapshots:
       '@octokit/plugin-rest-endpoint-methods': 17.0.0(@octokit/core@7.0.6)
       '@octokit/request': 10.0.8
       '@octokit/request-error': 7.1.0
-      undici: 8.9.0
+      undici: 8.10.0
 
   '@actions/http-client@3.0.2':
     dependencies:
       tunnel: 0.0.6
-      undici: 8.9.0
+      undici: 8.10.0
 
   '@actions/http-client@4.0.1':
     dependencies:
       tunnel: 0.0.6
-      undici: 8.9.0
+      undici: 8.10.0
 
   '@actions/io@3.0.2': {}
 
@@ -2490,7 +2490,7 @@ snapshots:
 
   undici-types@8.3.0: {}
 
-  undici@8.9.0: {}
+  undici@8.10.0: {}
 
   universal-user-agent@7.0.3: {}
 
