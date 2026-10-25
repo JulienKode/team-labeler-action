@@ -5,9 +5,34 @@ updates:
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 10
+    groups:
+      # Minor and patch version updates only. Major updates stay individual
+      # pull requests. applies-to keeps these rules off security updates.
+      production-dependencies:
+        applies-to: "version-updates"
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      development-dependencies:
+        applies-to: "version-updates"
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "monthly"
-    open-pull-requests-limit: 10 
+    open-pull-requests-limit: 10
+    groups:
+      # github-actions does not support dependency-type. Group low-risk
+      # minor and patch updates; major updates stay individual pull requests.
+      actions-minor-and-patch:
+        applies-to: "version-updates"
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
